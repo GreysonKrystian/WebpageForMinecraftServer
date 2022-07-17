@@ -6,6 +6,7 @@
         public string Nickname { get; set; }
         public DateTime DateCreated { get; set; }
         public string Rank { get; set; } 
+        public virtual ICollection<Post> Posts { get; set; }
 
     }
 }
