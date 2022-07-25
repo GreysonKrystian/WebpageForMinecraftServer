@@ -8,6 +8,7 @@ namespace MinecraftServerWeb.Repository.Interfaces
         void Remove(T obj);
         void RemoveRange(IEnumerable<T> objects);
         T GetFirstOrDefault(Expression<Func<T, bool>> filter);
+        IQueryable<T> GetWhere(Expression<Func<T, bool>> filter);
         IEnumerable<T> GetAll();
     }
 }

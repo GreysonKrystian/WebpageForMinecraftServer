@@ -19,8 +19,10 @@ namespace MinecraftServerWeb.Controllers
         public IActionResult Index()
         {
             IndexViewModel viewModel = new();
+            var posts =  _unitOfWork.Post.GetWhere(e => e.PostType == PostTypes.Announcement);
+            posts = posts.OrderByDescending(e => e.DateCreated);
+            viewModel.Posts = posts; 
             viewModel.Users = _unitOfWork.User.GetAll();
-            viewModel.Posts = _unitOfWork.Post.GetAll();
             return View(viewModel);
         }
 

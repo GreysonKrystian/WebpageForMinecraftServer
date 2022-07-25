@@ -20,7 +20,7 @@ namespace MinecraftServerWeb.Data
             modelBuilder.Entity<User>()
                 .Property(e => e.DateCreated)
                 .IsRequired()
-                .HasDefaultValue(DateTime.Now);
+                .HasDefaultValueSql("getdate()");
             modelBuilder.Entity<User>()
                 .Property(e => e.Rank)
                 .HasMaxLength(200)
@@ -30,7 +30,7 @@ namespace MinecraftServerWeb.Data
             modelBuilder.Entity<Post>()
                 .Property(e => e.DateCreated)
                 .IsRequired()
-                .HasDefaultValue(DateTime.Now);
+                .HasDefaultValueSql("getdate()");
             modelBuilder.Entity<Post>()
                 .HasOne(e => e.Author)
                 .WithMany(e => e.Posts);

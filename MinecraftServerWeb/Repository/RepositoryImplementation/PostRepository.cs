@@ -14,6 +14,12 @@ namespace MinecraftServerWeb.Repository.RepositoryImplementation
             _db = db;
         }
 
+        public User GetAuthor(int authorId)
+        {
+            User? user = _db.Users.FirstOrDefault(e => e.UserId == authorId);
+            return user ?? throw new NullReferenceException("Author with such authorId not found in database");
+        }
+
         public void Update(Post post)
         {
             _db.Update(post);

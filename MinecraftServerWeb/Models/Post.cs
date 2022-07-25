@@ -1,5 +1,11 @@
 ﻿namespace MinecraftServerWeb.Models
 {
+    public enum PostTypes
+    {
+        Announcement,
+        ForumPost
+    }
+
     public class Post
     {
         public int PostId { get; set; }
@@ -9,6 +15,7 @@
         public virtual User Author { get; set; }
 
         public string Content { get; set; }
+        public PostTypes PostType { get; set; }
 
     }
 }

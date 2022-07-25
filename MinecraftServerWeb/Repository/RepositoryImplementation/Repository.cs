@@ -33,6 +33,12 @@ namespace MinecraftServerWeb.Repository.Implementation
             return query.FirstOrDefault();
         }
 
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> filter)
+        {
+            IQueryable<T> query = dbSet;
+            return query.Where(filter);
+        }
+
         public void Remove(T obj)
         {
             dbSet.Remove(obj);
