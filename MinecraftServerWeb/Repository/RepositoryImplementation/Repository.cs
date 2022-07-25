@@ -38,9 +38,9 @@ namespace MinecraftServerWeb.Repository.Implementation
             dbSet.Remove(obj);
         }
 
-        public void RemoveRange(IEnumerable<T> objs)
+        public void RemoveRange(IEnumerable<T> objects)
         {
-            dbSet.RemoveRange(objs);
+            dbSet.RemoveRange(objects);
         }
     }
 }

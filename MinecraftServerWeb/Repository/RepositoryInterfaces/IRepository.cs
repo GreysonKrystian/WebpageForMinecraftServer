@@ -6,7 +6,7 @@ namespace MinecraftServerWeb.Repository.Interfaces
     {
         void Add(T obj);
         void Remove(T obj);
-        void RemoveRange(IEnumerable<T> objs);
+        void RemoveRange(IEnumerable<T> objects);
         T GetFirstOrDefault(Expression<Func<T, bool>> filter);
         IEnumerable<T> GetAll();
     }

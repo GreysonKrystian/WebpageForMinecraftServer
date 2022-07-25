@@ -1,4 +1,4 @@
-namespace MinecraftServerWeb.Models
+namespace MinecraftServerWeb.ViewModels
 {
     public class ErrorViewModel
     {
