@@ -32,41 +32,83 @@
     }*/
      
 </style>
+
+<!-- Server Logo -->
 <div class="container- border">
     <div class="image"> SERVER BANNER </div>
 </div>
+<!-- Server Banner -->
 <div class="text-center">
     <h2 class="display-4">Welcome to our server</h2>
+    <img src="https://api.loohpjames.com/serverbanner.png?ip=2b2t.org" class="img-fluid" alt="server banner" style="padding-top: 5px; width: auto; height: 100px"/>
 </div>
 <br/>
+<!-- Title -->
 <div class="text-center">
     <h3 class="display-5">announcements</h3>
 </div>
 <div class="d-xxl-grid border">
     <div class="row">
-        <div class="col-1">
-            <div class="side"> SIDE </div>
-        </div>
+        <!-- Posts-->
         <div class="col-9">
-            <div class="row">
-                <div class="col-2 border text-center">
-                    <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block"
-                         style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
-                    <label> NICKNAME </label>
-                    <label> Rank </label>
-                    <label> Posted: <br/>16:20 04.20.2022r. </label>
+            @foreach (Post post in Model.Posts) // TODO do maximum posts per page
+            {
+                User? author = Model.Users.FirstOrDefault(e => e.UserId == post.AuthorId);
+                <div class="row">
+                    <div class="col-2 border text-center">
+                        <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block"
+                             style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
+                        <label class=mb-1> @author.Nickname </label>
+                        <br/>
+                        <label class=mb-1> @author.Rank </label>
+                        <br/>
+                        <label class=mb-1> @post.DateCreated </label>
+                    </div>
+                    <div class="col-10 border my-auto ">
+                        <p class="form-control mt-3" readonly>
+                            @post.Content
+                        </p>
+                        <a class="link-primary"> read more/comments</a>
+                    </div>
                 </div>
-                <div class="col-10 border my-auto ">
-                    <p class="form-control" readonly>
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                    </p>
-                    <a class="link-primary"> read more/comments</a>
-                </div>
-            </div>
+            }
         </div>
-        <div class="col-2">
-            <div class="side"> SIDE </div>
+        <div class="col-3">
+            <br/>
+            <form>
+                <!-- Email-->
+                <div class="mb-3">
+                    <input type="email" id="email" class="form-control"/>
+                    <label class="form-label" for="email">adres Email</label>
+                </div>
+
+                <!-- Password-->
+                <div class="mb-3">
+                    <input type="password" id="form2Example2" class="form-control"/>
+                    <label class="form-label" for="form2Example2">Hasło</label>
+                </div>
+
+
+                <div class="row mb-3">
+                    <div class="col d-flex justify-content-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="password"/>
+                            <label class="form-check-label" for="password"> Zapamiętaj login </label>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <a href="#!">Reset hasła</a>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary mb-2">Zaloguj się</button>
+
+                <div class="text-center">
+                    <p>Nie posiadasz konta? <a href="#!">Rejestracja</a></p>
+                </div>
+            </form>
+            <a asp-controller="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
         </div>
     </div>
 </div>

@@ -23,7 +23,7 @@ namespace MinecraftServerWeb.Repository.Implementation
         }
         public IEnumerable<T> GetAll()
         {
-            return (IQueryable<T>)dbSet.ToList();
+            return dbSet.ToList();
         }
 
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
