@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MinecraftServerWeb.Models;
+using MinecraftServerWeb.Utility;
 
 namespace MinecraftServerWeb.Controllers
 {
@@ -27,8 +28,10 @@ namespace MinecraftServerWeb.Controllers
         // POST: Announcement/Create/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Post post)
+        public async Task<ActionResult> Create(Post post)
         {
+            var dcHook = new DiscordHookHandler("/1001169324494569492/3JmGCyaAsTiENcHC5vsvWFYW0TamlOk6MPjWURX3OK8PUWS5znJue7hI-yj219fO4Jvx");
+            await dcHook.CreateDiscordMessage(post);
             try
             {
                 return RedirectToAction(nameof(Index),"Home");
