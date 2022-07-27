@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MinecraftServerWeb.Models;
 
 namespace MinecraftServerWeb.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options){}
         public DbSet<User> Users { get; set; }
@@ -14,8 +15,9 @@ namespace MinecraftServerWeb.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>()
-                .Property(e => e.Nickname)
+                .Property(e => e.PublicNickname)
                 .IsRequired()
                 .HasColumnType("varchar")
                 .HasMaxLength(100);

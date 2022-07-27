@@ -5,7 +5,7 @@ namespace MinecraftServerWeb.Models
     {
 
         public int UserId { get; set; }
-        public string Nickname { get; set; }
+        public string PublicNickname { get; set; }
         public DateTime DateCreated { get; set; }
         public string Rank { get; set; } 
         public string AvatarUrl { get; set; }

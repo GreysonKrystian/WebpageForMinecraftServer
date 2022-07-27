@@ -19,7 +19,7 @@ namespace MinecraftServerWeb.Utility
         {
             using var client = new DiscordWebhookClient("https://discord.com/api/webhooks" + _discordIdAndToken);
             await client.SendMessageAsync(text: post.Content, 
-                username: post.Author.Nickname,
+                username: post.Author.PublicNickname,
                 avatarUrl: post.Author.AvatarUrl);
         }
 
@@ -40,7 +40,7 @@ namespace MinecraftServerWeb.Utility
                 Description = announcement.Description,
                 Author = new EmbedAuthorBuilder
                 {
-                    Name = announcement.Author.Nickname,
+                    Name = announcement.Author.PublicNickname,
                     IconUrl = announcement.Author.AvatarUrl
                 },
 
