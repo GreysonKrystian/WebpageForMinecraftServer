@@ -28,10 +28,10 @@ namespace MinecraftServerWeb.Controllers
         // POST: Announcement/Create/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Post post)
+        public async Task<ActionResult> Create(Announcement announcement)
         {
             var dcHook = new DiscordHookHandler("/1001169324494569492/3JmGCyaAsTiENcHC5vsvWFYW0TamlOk6MPjWURX3OK8PUWS5znJue7hI-yj219fO4Jvx");
-            await dcHook.CreateDiscordMessage(post);
+            await dcHook.SendDiscordEmbeddedMessage(announcement);
             try
             {
                 return RedirectToAction(nameof(Index),"Home");

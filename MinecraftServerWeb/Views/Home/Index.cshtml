@@ -51,7 +51,7 @@
     <div class="row">
         <!-- Posts-->
         <div class="col-9">
-            @foreach (Post post in Model.Posts) // TODO do maximum posts per page
+            @foreach (Post post in Model.Announcements) // TODO do maximum posts per page
             {
                 User? author = Model.Users.FirstOrDefault(e => e.UserId == post.AuthorId);
                 <div class="row">

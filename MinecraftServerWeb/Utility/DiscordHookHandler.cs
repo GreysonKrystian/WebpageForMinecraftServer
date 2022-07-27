@@ -15,19 +15,37 @@ namespace MinecraftServerWeb.Utility
             _discordIdAndToken = discordIdAndToken;
         }
 
-        public async Task CreateDiscordMessage(Post post)
+        public async Task SendDiscordMessage(Post post)
         {
-            using (var client = new DiscordWebhookClient("https://discord.com/api/webhooks" + _discordIdAndToken))
+            using var client = new DiscordWebhookClient("https://discord.com/api/webhooks" + _discordIdAndToken);
+            await client.SendMessageAsync(text: post.Content, 
+                username: post.Author.Nickname,
+                avatarUrl: post.Author.AvatarUrl);
+        }
+
+        public async Task SendDiscordEmbeddedMessage(Announcement announcement)
+        {
+            using var client = new DiscordWebhookClient("https://discord.com/api/webhooks" + _discordIdAndToken);
+
+            var embed = CreateEmbeddedMessage(announcement);
+
+            await client.SendMessageAsync(text: announcement.Content, embeds: new[] { embed.Build() });
+        }
+
+        private EmbedBuilder CreateEmbeddedMessage(Announcement announcement)
+        {
+            return new EmbedBuilder
             {
-                var embed = new EmbedBuilder
+                Title = announcement.Title,
+                Description = announcement.Description,
+                Author = new EmbedAuthorBuilder
                 {
-                    Title = "Test Embed",
-                    Description = "Test Description"
-                };
+                    Name = announcement.Author.Nickname,
+                    IconUrl = announcement.Author.AvatarUrl
+                },
 
-                await client.SendMessageAsync(text: "Test!", embeds: new[] { embed.Build() });
-            }
 
+            };
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MinecraftServerWeb.Data;
 using MinecraftServerWeb.Repository.Interfaces;
+using MinecraftServerWeb.Repository.RepositoryInterfaces;
 
 namespace MinecraftServerWeb.Repository.RepositoryImplementation
 {
@@ -12,9 +13,12 @@ namespace MinecraftServerWeb.Repository.RepositoryImplementation
             _db = db;
             Post = new PostRepository(_db);
             User = new UserRepository(_db);
+            Announcement = new AnnouncementRepository(_db);
         }
         public IPostRepository Post {get;}
         public IUserRepository User {get;}
+        public IAnnouncementRepository Announcement {get;}
+
 
         public void Commit()
         {

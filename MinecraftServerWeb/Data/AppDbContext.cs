@@ -9,6 +9,8 @@ namespace MinecraftServerWeb.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
 
+        public DbSet<Announcement> Announcements { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
