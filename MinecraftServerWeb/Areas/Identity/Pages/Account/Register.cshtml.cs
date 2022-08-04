@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MinecraftServerWeb.Models;
 using MinecraftServerWeb.Utility;
 
 namespace MinecraftServerWeb.Areas.Identity.Pages.Account
@@ -101,6 +102,12 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+
+            [Display(Name = "Nick na forum")] 
+            [StringLength(100, ErrorMessage = "{0} musi mieć od {2} do {1} znaków.", MinimumLength = 6)]
+            public string? ForumNickname { get; set; }
+            public string? AvatarUrl { get; set; }
         }
 
 
@@ -137,6 +144,9 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.AvatarUrl = Input.AvatarUrl;
+                user.DateCreated = DateTime.Now;
+                user.ForumNickname = Input.ForumNickname;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -175,11 +185,11 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private User CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<User>();
             }
             catch
             {

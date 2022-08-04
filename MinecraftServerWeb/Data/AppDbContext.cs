@@ -19,6 +19,10 @@ namespace MinecraftServerWeb.Data
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<User>()
                 .Property(e => e.ServerNickname)
+                .HasColumnType("varchar")
+                .HasMaxLength(100);
+            modelBuilder.Entity<User>()
+                .Property(e => e.ForumNickname)
                 .IsRequired()
                 .HasColumnType("varchar")
                 .HasMaxLength(100);
@@ -37,11 +41,10 @@ namespace MinecraftServerWeb.Data
                 .IsRequired()
                 .HasDefaultValueSql("getdate()");
             modelBuilder.Entity<Post>()
-                .HasOne(e => e.Author)
-                .WithMany(e => e.Posts);
-            modelBuilder.Entity<Post>()
                 .Property(e => e.AuthorId)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(450)
+                .HasColumnType("nvarchar");
         }
 
     }

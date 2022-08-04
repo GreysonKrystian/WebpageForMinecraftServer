@@ -53,7 +53,7 @@
         <div class="col-9">
             @foreach (Post post in Model.Announcements) // TODO do maximum posts per page
             {
-                User? author = Model.Users.FirstOrDefault(e => e.UserId == post.AuthorId);
+                User? author = Model.Users.FirstOrDefault(e => e.Id == post.Author.Id);
                 <div class="row">
                     <div class="col-2 border text-center">
                         <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block"

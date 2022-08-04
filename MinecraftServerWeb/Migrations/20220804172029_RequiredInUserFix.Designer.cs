@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinecraftServerWeb.Data;
 
@@ -11,9 +12,10 @@ using MinecraftServerWeb.Data;
 namespace MinecraftServerWeb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220804172029_RequiredInUserFix")]
+    partial class RequiredInUserFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,9 +230,11 @@ namespace MinecraftServerWeb.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostId"), 1L, 1);
 
-                    b.Property<string>("AuthorId")
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuthorId1")
                         .IsRequired()
-                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -248,7 +252,7 @@ namespace MinecraftServerWeb.Migrations
 
                     b.HasKey("PostId");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorId1");
 
                     b.ToTable("Posts");
 
@@ -283,11 +287,6 @@ namespace MinecraftServerWeb.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<string>("ForumNickname")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
                     b.Property<string>("Rank")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -296,8 +295,12 @@ namespace MinecraftServerWeb.Migrations
                         .HasDefaultValue("User");
 
                     b.Property<string>("ServerNickname")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -357,7 +360,7 @@ namespace MinecraftServerWeb.Migrations
                 {
                     b.HasOne("MinecraftServerWeb.Models.User", "Author")
                         .WithMany("Posts")
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("AuthorId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

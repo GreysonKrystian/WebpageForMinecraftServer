@@ -5,12 +5,11 @@ namespace MinecraftServerWeb.Models
 {
     public class User : IdentityUser
     {
-
-        public int UserId { get; set; }
-        public string ServerNickname { get; set; }
+        public string? ServerNickname { get; set; }
+        public string ForumNickname { get; set; }
         public DateTime DateCreated { get; set; }
         public string Rank { get; set; } 
-        public string AvatarUrl { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+        public string? AvatarUrl { get; set; }
+        public virtual ICollection<Post>? Posts { get; set; }
     }
 }
