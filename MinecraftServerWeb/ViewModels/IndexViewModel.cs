@@ -1,4 +1,5 @@
-﻿using MinecraftServerWeb.Models;
+﻿using MinecraftServerWeb.Areas.Identity.Pages.Account;
+using MinecraftServerWeb.Models;
 
 namespace MinecraftServerWeb.ViewModels
 {
@@ -6,5 +7,7 @@ namespace MinecraftServerWeb.ViewModels
     {
         public IEnumerable<Announcement>? Announcements { get; set; }
         public IEnumerable<User>? Users { get; set; }  
+
+        public LoginModel LoginModel { get; set; }
     }
 }

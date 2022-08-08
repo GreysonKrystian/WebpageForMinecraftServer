@@ -75,39 +75,7 @@
         </div>
         <div class="col-3">
             <br/>
-            <form>
-                <!-- Email-->
-                <div class="mb-3">
-                    <input type="email" id="email" class="form-control"/>
-                    <label class="form-label" for="email">adres Email</label>
-                </div>
-
-                <!-- Password-->
-                <div class="mb-3">
-                    <input type="password" id="form2Example2" class="form-control"/>
-                    <label class="form-label" for="form2Example2">Hasło</label>
-                </div>
-
-
-                <div class="row mb-3">
-                    <div class="col d-flex justify-content-center">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="password"/>
-                            <label class="form-check-label" for="password"> Zapamiętaj login </label>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <a href="#!">Reset hasła</a>
-                    </div>
-                </div>
-
-                <button type="button" class="btn btn-primary mb-2">Zaloguj się</button>
-
-                <div class="text-center">
-                    <p>Nie posiadasz konta? <a href="#!">Rejestracja</a></p>
-                </div>
-            </form>
+            <partial name="_LoginPanel" for="@Model.LoginModel"/>
             <a asp-controller="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
         </div>
     </div>
