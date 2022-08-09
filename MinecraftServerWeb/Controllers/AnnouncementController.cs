@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,9 +40,8 @@ namespace MinecraftServerWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Announcement announcement)
         {
-            announcement.Author = (User)_userManager.FindByIdAsync(announcement.AuthorId).GetAwaiter().GetResult(); // TODO automate (not by ID)
-
-            var dcHook = new DiscordHookHandler("/1001169324494569492/3JmGCyaAsTiENcHC5vsvWFYW0TamlOk6MPjWURX3OK8PUWS5znJue7hI-yj219fO4Jvx"); // TODO make this environmental
+            announcement.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var dcHook = new DiscordHookHandler("/1001169324494569492/3JmGCyaAsTiENcHC5vsvWFYW0TamlOk6MPjWURX3OK8PUWS5znJue7hI-yj219fO4Jvx", _userManager); // TODO make this environmental
             await dcHook.SendDiscordEmbeddedMessage(announcement);
 
             _unitOfWork.Announcement.Add(announcement); // TODO exception handling

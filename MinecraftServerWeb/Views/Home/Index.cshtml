@@ -27,63 +27,113 @@
         margin: 0 auto;
         width: 100%;
     }
-    
-/*[class*="col"] {
-        padding: 1rem;
 
-    }*/
-     
 </style>
+<div id="content-wrapper" class="d-flex flex-column">
+    <!-- Server Logo -->
+    <div class="container border">
+        <div class="image"> SERVER BANNER </div>
+    </div>
+    <!-- Server Banner -->
+    <div class="text-center">
+        <h2 class="display-4">Welcome to our server</h2>
+        <img src="https://api.loohpjames.com/serverbanner.png?ip=2b2t.org" class="img-fluid" alt="server banner" style="padding-top: 5px; width: auto; height: 100px"/>
+    </div>
+    <br/>
+    <!-- Title -->
+    <div class="text-center">
+        <h3 class="display-5">announcements</h3>
+    </div>
+    <div class="d-xxl-grid border">
+        <div class="row">
+            <!-- Announcements -->
+            <div class="col-9">
+                @foreach (Announcement post in Model.Announcements) // TODO do maximum posts per page
+                {
+                    User? author = Model.Users.FirstOrDefault(e => e.Id == post.Author.Id);
+                    <div class="row ">
+                        <div class="col-2 text-center">
+                            <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block"
+                                 style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
+                            <div class="mt-1 badge bg-primary text-wrap"> @author.ForumNickname </div>
+                            <br/>
+                            <div class="mt-1 badge bg-danger text-wrap"> @author.Rank </div>
+                            <div class="mt-1 badge bg-secondary text-wrap"> @post.DateCreated.ToString("MM/dd/yyyy HH:mm") </div>
+                        </div>
+                        <div class="col-10 border my-auto ">
+                            <h5 class="display-6 mt-2 center">
+                                @post.Title
+                            </h5>
+                            @if (post.Description != null)
+                            {
+                                <p class="form-control mt-5 text-capitalize text-primary ">
+                                    @post.Description
+                                </p>
+                            }
+                            <!-- content of Announcements -->
+                            @if (post.Content.Split(" ").Length > 90)
+                            {
 
-<!-- Server Logo -->
-<div class="container- border">
-    <div class="image"> SERVER BANNER </div>
-</div>
-<!-- Server Banner -->
-<div class="text-center">
-    <h2 class="display-4">Welcome to our server</h2>
-    <img src="https://api.loohpjames.com/serverbanner.png?ip=2b2t.org" class="img-fluid" alt="server banner" style="padding-top: 5px; width: auto; height: 100px"/>
-</div>
-<br/>
-<!-- Title -->
-<div class="text-center">
-    <h3 class="display-5">announcements</h3>
-</div>
-<div class="d-xxl-grid border">
-    <div class="row">
-        <!-- Posts-->
-        <div class="col-9">
-            @foreach (Post post in Model.Announcements) // TODO do maximum posts per page
+                                <p class="form-control mt-3" readonly>
+                                    @String.Join(" ", post.Content.Split(" ").Take(90))....
+                                    <a class="link-primary fw-bold">czytaj całość</a>
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="form-control mt-3" readonly>
+                                    @post.Content
+                                </p>
+                            }
+                            <a class="link-primary fw-bold"> komentarze </a>
+
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-3">
+                <br/>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <partial name="_LoginPanel" for="@Model.LoginModel"/>
+                }
+                else
+                {
+                    <div class="card border-start border-1 shadow h-100 py-2 me-1">
+                        <div class="card-header py-3">
+                            <h5 class="m-1 fw-bold text-primary">
+                                Zalogowano jako:
+                            </h5>
+                            <h6 class="ps-3">
+                                @User.Identity.Name;
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    Zarządzanie Kontem 
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    Panel Gracza
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    Lorem ipsum
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    Porta ac consectetur ac
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (User.IsInRole(SD.RoleOwner))
             {
-                User? author = Model.Users.FirstOrDefault(e => e.Id == post.Author.Id);
-                <div class="row">
-                    <div class="col-2 border text-center">
-                        <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block"
-                             style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
-                        <label class=mb-1> @author.ForumNickname </label>
-                        <br/>
-                        <label class=mb-1> @author.Rank </label>
-                        <br/>
-                        <label class=mb-1> @post.DateCreated.ToString("MM/dd/yyyy HH:mm") </label>
-                    </div>
-                    <div class="col-10 border my-auto ">
-                        <p class="form-control mt-3" readonly>
-                            @post.Content
-                        </p>
-                        <a class="link-primary"> read more/comments</a>
-                    </div>
+                <div class="col-3 m-1">
+                    <a asp-controller="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
                 </div>
             }
         </div>
-        <div class="col-3">
-            <br/>
-            <partial name="_LoginPanel" for="@Model.LoginModel"/>
-        </div>
-        @if (User.IsInRole(SD.RoleOwner))
-        {
-            <div class="col-3 m-1">
-                <a asp-controller="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
-            </div>
-        }
     </div>
 </div>

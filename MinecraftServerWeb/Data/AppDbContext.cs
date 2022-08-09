@@ -45,6 +45,10 @@ namespace MinecraftServerWeb.Data
                 .IsRequired()
                 .HasMaxLength(450)
                 .HasColumnType("nvarchar");
+
+            modelBuilder.Entity<Announcement>()
+                .Property(e => e.Description)
+                .HasMaxLength(2000);
         }
 
     }

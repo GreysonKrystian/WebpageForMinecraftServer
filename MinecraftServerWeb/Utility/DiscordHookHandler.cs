@@ -2,7 +2,9 @@
 using System.Text;
 using Discord;
 using Discord.Webhook;
+using Microsoft.AspNetCore.Identity;
 using MinecraftServerWeb.Models;
+using MinecraftServerWeb.Utility.Exceptions;
 
 
 namespace MinecraftServerWeb.Utility
@@ -10,9 +12,11 @@ namespace MinecraftServerWeb.Utility
     public class DiscordHookHandler : IDiscordHookHandler
     {
         private readonly string _discordIdAndToken;
-        public DiscordHookHandler(string discordIdAndToken)
+        private readonly UserManager<IdentityUser> _userManager;
+        public DiscordHookHandler(string discordIdAndToken, UserManager<IdentityUser> userManager)
         {
             _discordIdAndToken = discordIdAndToken;
+            _userManager = userManager;
         }
 
         public async Task SendDiscordMessage(Post post)
@@ -29,19 +33,24 @@ namespace MinecraftServerWeb.Utility
 
             var embed = CreateEmbeddedMessage(announcement);
 
-            await client.SendMessageAsync(text: announcement.Content, embeds: new[] { embed.Build() });
+            await client.SendMessageAsync(embeds: new[] { embed.Build() });
         }
 
         private EmbedBuilder CreateEmbeddedMessage(Announcement announcement)
         {
+            User user = (User)_userManager.FindByIdAsync(announcement.AuthorId).GetAwaiter().GetResult();
+            if (user == null)
+            {
+                throw new UserNotFoundException($"User with id: {announcement.AuthorId} was not found");
+            }
             return new EmbedBuilder
             {
                 Title = announcement.Title,
-                Description = announcement.Description,
+                Description = announcement.Content, // TODO Temporary then remove
                 Author = new EmbedAuthorBuilder
                 {
-                    Name = announcement.Author.ServerNickname,
-                    IconUrl = announcement.Author.AvatarUrl
+                    Name = user.ForumNickname,
+                    IconUrl = user.AvatarUrl
                 },
 
 
