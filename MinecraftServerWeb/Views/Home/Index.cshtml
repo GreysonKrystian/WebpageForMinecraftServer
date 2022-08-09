@@ -1,4 +1,6 @@
-﻿@model IndexViewModel
+﻿@using System.Security.Claims
+@using MinecraftServerWeb.Utility
+@model IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -58,11 +60,11 @@
                     <div class="col-2 border text-center">
                         <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block"
                              style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
-                        <label class=mb-1> @author.ServerNickname </label>
+                        <label class=mb-1> @author.ForumNickname </label>
                         <br/>
                         <label class=mb-1> @author.Rank </label>
                         <br/>
-                        <label class=mb-1> @post.DateCreated </label>
+                        <label class=mb-1> @post.DateCreated.ToString("MM/dd/yyyy HH:mm") </label>
                     </div>
                     <div class="col-10 border my-auto ">
                         <p class="form-control mt-3" readonly>
@@ -76,7 +78,12 @@
         <div class="col-3">
             <br/>
             <partial name="_LoginPanel" for="@Model.LoginModel"/>
-            <a asp-controller="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
         </div>
+        @if (User.IsInRole(SD.RoleOwner))
+        {
+            <div class="col-3 m-1">
+                <a asp-controller="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
+            </div>
+        }
     </div>
 </div>

@@ -5,6 +5,7 @@ using MinecraftServerWeb.Repository.RepositoryImplementation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using MinecraftServerWeb.Utility;
+using Path = MinecraftServerWeb.Utility.Path;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = Path.LoginPath;
+    options.LogoutPath = Path.LogoutPath; 
+    options.AccessDeniedPath = Path.AccessDeniedPath;
+});
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

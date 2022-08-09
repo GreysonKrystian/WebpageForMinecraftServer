@@ -148,12 +148,18 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account
                 user.AvatarUrl = Input.AvatarUrl;
                 user.DateCreated = DateTime.Now;
                 user.ForumNickname = Input.ForumNickname;
+                user.Rank = SD.RoleUser;
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    var rankResult = await _userManager.AddToRoleAsync(user, SD.RoleUser);
+                    if (!rankResult.Succeeded)
+                    {
+                        _logger.LogError("Failed To Add rank to user"); //TODO add info for user about fail
+                        return Page();
+                    }
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

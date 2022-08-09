@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MinecraftServerWeb.Models;
@@ -7,11 +8,13 @@ using MinecraftServerWeb.Utility;
 
 namespace MinecraftServerWeb.Controllers
 {
+    [Authorize(Roles= SD.RoleOwner)]
     public class AnnouncementController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<IdentityUser> _userManager;
+
         public AnnouncementController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
@@ -24,11 +27,6 @@ namespace MinecraftServerWeb.Controllers
             return View();
         }
 
-        // GET: Announcement/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
         // GET: Announcement/Create
         public ActionResult Create()
@@ -43,7 +41,7 @@ namespace MinecraftServerWeb.Controllers
         {
             announcement.Author = (User)_userManager.FindByIdAsync(announcement.AuthorId).GetAwaiter().GetResult(); // TODO automate (not by ID)
 
-            var dcHook = new DiscordHookHandler("/1001169324494569492/3JmGCyaAsTiENcHC5vsvWFYW0TamlOk6MPjWURX3OK8PUWS5znJue7hI-yj219fO4Jvx");
+            var dcHook = new DiscordHookHandler("/1001169324494569492/3JmGCyaAsTiENcHC5vsvWFYW0TamlOk6MPjWURX3OK8PUWS5znJue7hI-yj219fO4Jvx"); // TODO make this environmental
             await dcHook.SendDiscordEmbeddedMessage(announcement);
 
             _unitOfWork.Announcement.Add(announcement); // TODO exception handling
