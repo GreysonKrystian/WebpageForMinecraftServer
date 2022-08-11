@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Server.IIS.Core
 @using MinecraftServerWeb.Utility
 @model IndexViewModel
 @{
@@ -44,104 +45,155 @@
         <div class="row">
             <!-- Announcements -->
             <div class="col-9">
-                @foreach (Announcement post in Model.Announcements) // TODO do maximum posts per page
-                {
-                    User? author = Model.Users.FirstOrDefault(e => e.Id == post.Author.Id);
-                    <div class="row ">
-                        <div class="col-2 text-center pe-1 mt-3 mb-3">
-                            <div class="card border-start border-1 shadow h-100 py-2 me-1">
-                                <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block mb-2"
-                                     style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
-                                <div class="mt-2 badge bg-primary text-wrap"> @author.ForumNickname </div>
-                                <div class="mt-2 badge bg-danger text-wrap"> @author.Rank </div>
-                                <div class="mt-2 badge bg-secondary text-wrap"> <p>Dodano:</p> <p>@post.DateCreated.ToString("HH:mm dd/MM/yyyy") </p></div>
+                @{
+                    const int postsPerPage = 1;
+                    if (postsPerPage <= 0)
+                    #pragma warning disable CS0162
+                    {
+                        throw new ArgumentOutOfRangeException("Number of posts must be positive value"); 
+                    }
+                    #pragma warning restore CS0162
+                        
+                    for (int postIndex = (Model.PageId - 1) * postsPerPage; postIndex < Model.Announcements.Count() && postIndex != (Model.PageId - 1) * postsPerPage + postsPerPage; postIndex++)
+                    {
+                        var post = Model.Announcements.ElementAt(postIndex);
+                        User? author = Model.Users.FirstOrDefault(e => e.Id == post.Author.Id);
+                        <div class="row ">
+                            <div class="col-2 text-center pe-1 mt-3 mb-3">
+                                <div class="card border-start border-1 shadow h-100 py-2 me-1">
+                                    <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block mb-2"
+                                         style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
+                                    <div class="mt-2 badge bg-primary text-wrap"> @author.ForumNickname </div>
+                                    <div class="mt-2 badge bg-danger text-wrap"> @author.Rank </div>
+                                    <div class="mt-2 badge bg-secondary text-wrap">
+                                        <p>Dodano:</p>
+                                        <p>@post.DateCreated.ToString("HH:mm dd/MM/yyyy") </p></div>
+                                </div>
+                            </div>
+                            <div class="col-10 border my-2 ">
+                                <h5 class="display-6 mt-2 center">
+                                    @post.Title
+                                </h5>
+                                @if (post.Description != null)
+                                {
+                                    <p class="form-control mt-5 text-capitalize text-primary ">
+                                        @post.Description
+                                    </p>
+                                }
+                                <!-- content of Announcements -->
+                                @{
+                                    const int maximumShownWords = 90;
+
+                                    if (post.Content.Split(" ").Length > maximumShownWords)
+                                    {
+
+                                        <p class="form-control" readonly>
+                                            @String.Join(" ", post.Content.Split(" ").Take(maximumShownWords))....
+                                            <a class="link-primary fw-bold">czytaj całość</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="form-control" readonly>
+                                            @post.Content
+                                        </p>
+                                    }
+                                }
+                                <a class="link-primary fw-bold"> komentarze </a>
                             </div>
                         </div>
-                        <div class="col-10 border my-2 ">
-                            <h5 class="display-6 mt-2 center">
-                                @post.Title
-                            </h5>
-                            @if (post.Description != null)
-                            {
-                                <p class="form-control mt-5 text-capitalize text-primary ">
-                                    @post.Description
-                                </p>
-                            }
-                            <!-- content of Announcements -->
-                            @if (post.Content.Split(" ").Length > 90)
-                            {
-
-                                <p class="form-control" readonly>
-                                    @String.Join(" ", post.Content.Split(" ").Take(90))....
-                                    <a class="link-primary fw-bold">czytaj całość</a>
-                                </p>
-                            }
-                            else
-                            {
-                                <p class="form-control" readonly>
-                                    @post.Content
-                                </p>
-                            }
-                            <a class="link-primary fw-bold"> komentarze </a>
-                        </div>
-                    </div>
+                    }
                 }
             </div>
             <!-- Side panel-->
             <div class="col-3">
                 <br/>
                 <div class="row">
-                @if (!User.Identity.IsAuthenticated)
-                {
-                    <div class="py-2 me-1">
-                        <partial name="_LoginPanel" for="@Model.LoginModel"/>
-                    </div>
-                }
-                else
-                {
-                    <div class="card border-start border-1 shadow h-100 py-2 me-1">
-                        <div class="card-header py-3">
-                            <h5 class="fw-bold text-primary">
-                                Zalogowano jako:
-                            </h5>
-                            <h6 class="ps-2">
-                                @User.Identity.Name;
-                            </h6>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <div class="py-2 me-1">
+                            <partial name="_LoginPanel" for="@Model.LoginModel"/>
                         </div>
-                        <div class="card-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    Zarządzanie Kontem 
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    Panel Gracza
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    Lorem ipsum
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    Porta ac consectetur ac
-                                </a>
+                    }
+                    else
+                    {
+                        <div class="card border-start border-1 shadow h-100 py-2 me-1">
+                            <div class="card-header py-3">
+                                <h5 class="fw-bold text-primary">
+                                    Zalogowano jako:
+                                </h5>
+                                <h6 class="ps-2">
+                                    @User.Identity.Name;
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        Zarządzanie Kontem 
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        Panel Gracza
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        Lorem ipsum
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        Porta ac consectetur ac
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
                 </div>
             </div>
+            <!-- Bottom buttons-->
             <div class="row">
                 <div class="col-3 m-3">
                 @if (User.IsInRole(SD.RoleOwner))
                 {
                     
-                        <a asp-controlle0r="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
+                        <a asp-controller="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
                     
                 }
                 </div>
             <div class="col-6">
-                <div class="card-header float-end mt-3">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <a asp-action="Index" asp-route-pageId="@i" class="link-primary m-2"> @i </a>
+                <div class="card-header float-end mt-3 text-primary">
+                    @{
+                        int pageNumbersCounter = 1;
+                        <label id="PageLabel">Strony:</label>
+                        if (Model.PageId > 2)
+                        {
+                            <a asp-action="Index" asp-route-pageId="1" class="btn btn-primary" id="PageButton"> 1 </a>
+                            if (Model.PageId > 3)
+                            {
+                                <label> ... </label>
+                            }
+                        }
+                        double lastPage = Math.Ceiling(Model.Announcements.Count() / (double)postsPerPage);
+                        for (int i = Model.PageId-1; i <= lastPage; i++)
+                        {
+                            if (i < 1)
+                            {
+                                i = 1;
+                            }
+                            if (pageNumbersCounter == 4 && i != lastPage)
+                            {
+                                <label> ... </label>
+                                <a asp-action="Index" asp-route-pageId="@lastPage" class="btn btn-primary" id="PageButton">
+                                    @lastPage
+                                </a>
+                                break;
+                            }
+                            if (i == Model.PageId)
+                            {
+                                <a class="btn alert-primary disabled" id="CurrentPageButton"> @i </a>
+                            }
+                            else
+                            {
+                                <a asp-action="Index" asp-route-pageId="@i" class="btn btn-primary" id="PageButton"> @i </a>
+                            }
+                            pageNumbersCounter++;
+                        }
                     }
                 </div>
             </div>

@@ -40,14 +40,17 @@ namespace MinecraftServerWeb.Controllers
             return loginModel;
         }
 
-        public async Task<IActionResult> Index(int page=1, int? announcementToExpandId=null)
+        public async Task<IActionResult> Index(int pageId=1, int? announcementToExpandId=null)
         {
             IndexViewModel viewModel = new();
             var announcements = _unitOfWork.Announcement.GetAll();
             announcements = announcements.OrderByDescending(e => e.DateCreated);
+
             viewModel.Announcements = announcements; 
             viewModel.Users = _unitOfWork.User.GetAll();
             viewModel.LoginModel = await ConfigureLoginModel();
+            viewModel.PageId = pageId;
+            viewModel.AnnouncementToExpandId = announcementToExpandId;
 
             return View(viewModel);
         }
