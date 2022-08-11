@@ -39,7 +39,8 @@ namespace MinecraftServerWeb.Controllers
 
             return loginModel;
         }
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(int page=1, int? announcementToExpandId=null)
         {
             IndexViewModel viewModel = new();
             var announcements = _unitOfWork.Announcement.GetAll();
