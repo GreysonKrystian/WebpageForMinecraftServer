@@ -46,7 +46,7 @@
             <!-- Announcements -->
             <div class="col-lg-9">
                 @{
-                    const int postsPerPage = 1;
+                    const int postsPerPage = 2;
                     if (postsPerPage <= 0)
                     #pragma warning disable CS0162
                     {
@@ -60,7 +60,7 @@
                         User? author = Model.Users.FirstOrDefault(e => e.Id == post.Author.Id);
                         <div class="row">
                             <div class="col-sm-2 text-center pe-1 mt-3 mb-3">
-                                <div class="card border-start border-1 shadow h-100 py-2 me-1">
+                                <div class="card border-start py-2 me-1">
                                     <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block mb-2"
                                          style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
                                     <div class="mt-2 badge bg-primary text-wrap"> @author.ForumNickname </div>
@@ -101,11 +101,11 @@
                                 }
                                 <div class="row align-items-end">
                                     <div class="col-md-6">
-                                        <a class="btn btn-primary fw-bold float-start mb-2"> Komentarze </a>
+                                        <a asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2"> Komentarze </a>
                                     </div>
                                     <div class="col-md-6">
-                                        <a asp-controller="Announcement" asp-action="Edit" class="btn btn-warning m-2 float-end"> Edytuj </a>
-                                        <a asp-controller="Announcement" asp-action="Delete" class="btn btn-danger m-2 float-end"> Usuń </a>
+                                        <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
+                                        <a asp-controller="Announcement" asp-action="Delete" asp-route-announcementId="@post.PostId" class="btn btn-danger m-2 float-end"> Usuń </a>
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                 }
             </div>
             <!-- Side panel-->
-            <div class="col-sm-3">
+            <div class="col-lg-3">
                 <div class="row">
                     @if (!User.Identity.IsAuthenticated)
                     {

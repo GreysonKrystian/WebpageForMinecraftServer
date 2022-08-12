@@ -1,16 +1,25 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model MinecraftServerWeb.Models.Announcement
+﻿@model MinecraftServerWeb.Models.Announcement
 
 @{
-    ViewData["Title"] = "Tworzenie Ogłoszenia";
+    ViewData["Title"] = "Edycja Ogłoszenia";
+    bool ResendOnDiscord = false;
 }
-
 <h4>@ViewData["Title"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-10">
-        <form method="post">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsEmbedded" /> Wiadomość wbudowana (discord)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="@ResendOnDiscord" /> Wysłać ponownie na serwer discord?
+                </label>
+            </div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"> Tytuł </label>
                 <input asp-for="Title" class="form-control" />
@@ -21,13 +30,15 @@
                 <textarea asp-for="Description" rows="3" class="form-control"> </textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="PostId"/>
+            <input type="hidden" asp-for="AuthorId" />
             <div class="form-group">
                 <label asp-for="Content" class="control-label"> Treść Ogłoszenia </label>
-                <textarea asp-for="Content" rows="20" class="form-control" required data-error="Wprowadź tekst"></textarea>
+            <textarea asp-for="Content" rows="20" class="form-control" required data-error="Wprowadź tekst"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Stwórz" class="btn btn-primary" />
+                <input type="submit" value="Potwierdź" class="btn btn-primary" />
             </div>
         </form>
     </div>

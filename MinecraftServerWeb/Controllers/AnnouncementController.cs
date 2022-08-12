@@ -56,27 +56,29 @@ namespace MinecraftServerWeb.Controllers
         // GET: Announcement/Edit/5
         public ActionResult Edit(int announcementId)
         {
-            Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId != announcementId);
-            if (post.AuthorId != User.FindFirstValue(ClaimTypes.NameIdentifier))
-            {
-                return Unauthorized();
-            }
+            Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
             if (post is null)
             {
                 return BadRequest();
             }
-
-            return View();
+            if (post.AuthorId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                return Unauthorized();
+            }
+            return View(post);
         }
 
         // POST: Announcement/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int announcementId, IFormCollection collection)
+        public ActionResult Edit(Announcement announcement)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                announcement.DateCreated = DateTime.Now;
+                _unitOfWork.Announcement.Update(announcement);
+                _unitOfWork.Commit();
+                return RedirectToAction(nameof(Index), controllerName:"Home");
             }
             catch
             {
@@ -85,7 +87,7 @@ namespace MinecraftServerWeb.Controllers
         }
 
         // GET: Announcement/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int announcementId)
         {
             return View();
         }
@@ -93,16 +95,22 @@ namespace MinecraftServerWeb.Controllers
         // POST: Announcement/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int announcementId, IFormCollection collection)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), controllerName:"Home");
             }
             catch
             {
                 return View();
             }
+        }
+
+        // GET: Announcement/Details/5
+        public ActionResult Details(int announcementId)
+        {
+            return View();
         }
     }
 }
