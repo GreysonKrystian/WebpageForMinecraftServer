@@ -9,7 +9,7 @@ using MinecraftServerWeb.Utility;
 
 namespace MinecraftServerWeb.Controllers
 {
-    [Authorize(Roles= SD.RoleOwner)]
+    [Authorize(Roles= SD.RoleOwner + ", " + SD.RoleAdmin)]
     public class AnnouncementController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,11 +21,6 @@ namespace MinecraftServerWeb.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
-        }
-        // GET: Announcement
-        public ActionResult Index()
-        {
-            return View();
         }
 
 
@@ -59,15 +54,25 @@ namespace MinecraftServerWeb.Controllers
         }
 
         // GET: Announcement/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int announcementId)
         {
+            Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId != announcementId);
+            if (post.AuthorId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                return Unauthorized();
+            }
+            if (post is null)
+            {
+                return BadRequest();
+            }
+
             return View();
         }
 
         // POST: Announcement/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int announcementId, IFormCollection collection)
         {
             try
             {

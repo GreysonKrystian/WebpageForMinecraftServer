@@ -41,10 +41,10 @@
     <div class="text-center">
         <h3 class="display-5">announcements</h3>
     </div>
-    <div class="d-xxl-grid border">
+    <div class="d-xxl-grid">
         <div class="row">
             <!-- Announcements -->
-            <div class="col-9">
+            <div class="col-lg-9">
                 @{
                     const int postsPerPage = 1;
                     if (postsPerPage <= 0)
@@ -58,8 +58,8 @@
                     {
                         var post = Model.Announcements.ElementAt(postIndex);
                         User? author = Model.Users.FirstOrDefault(e => e.Id == post.Author.Id);
-                        <div class="row ">
-                            <div class="col-2 text-center pe-1 mt-3 mb-3">
+                        <div class="row">
+                            <div class="col-sm-2 text-center pe-1 mt-3 mb-3">
                                 <div class="card border-start border-1 shadow h-100 py-2 me-1">
                                     <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block mb-2"
                                          style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
@@ -70,7 +70,7 @@
                                         <p>@post.DateCreated.ToString("HH:mm dd/MM/yyyy") </p></div>
                                 </div>
                             </div>
-                            <div class="col-10 border my-2 ">
+                            <div class="col-lg-10 border my-2" id="AnnouncementContent">
                                 <h5 class="display-6 mt-2 center">
                                     @post.Title
                                 </h5>
@@ -99,15 +99,22 @@
                                         </p>
                                     }
                                 }
-                                <a class="link-primary fw-bold"> komentarze </a>
+                                <div class="row align-items-end">
+                                    <div class="col-md-6">
+                                        <a class="btn btn-primary fw-bold float-start mb-2"> Komentarze </a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a asp-controller="Announcement" asp-action="Edit" class="btn btn-warning m-2 float-end"> Edytuj </a>
+                                        <a asp-controller="Announcement" asp-action="Delete" class="btn btn-danger m-2 float-end"> Usuń </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     }
                 }
             </div>
             <!-- Side panel-->
-            <div class="col-3">
-                <br/>
+            <div class="col-sm-3">
                 <div class="row">
                     @if (!User.Identity.IsAuthenticated)
                     {
@@ -149,54 +156,52 @@
             <!-- Bottom buttons-->
             <div class="row">
                 <div class="col-3 m-3">
-                @if (User.IsInRole(SD.RoleOwner))
-                {
-                    
-                        <a asp-controller="Announcement" asp-action="Create" class="btn btn-success mb-2"> Dodaj ogłoszenie</a>
-                    
-                }
-                </div>
-            <div class="col-6">
-                <div class="card-header float-end mt-3 text-primary">
-                    @{
-                        int pageNumbersCounter = 1;
-                        <label id="PageLabel">Strony:</label>
-                        if (Model.PageId > 2)
-                        {
-                            <a asp-action="Index" asp-route-pageId="1" class="btn btn-primary" id="PageButton"> 1 </a>
-                            if (Model.PageId > 3)
-                            {
-                                <label> ... </label>
-                            }
-                        }
-                        double lastPage = Math.Ceiling(Model.Announcements.Count() / (double)postsPerPage);
-                        for (int i = Model.PageId-1; i <= lastPage; i++)
-                        {
-                            if (i < 1)
-                            {
-                                i = 1;
-                            }
-                            if (pageNumbersCounter == 4 && i != lastPage)
-                            {
-                                <label> ... </label>
-                                <a asp-action="Index" asp-route-pageId="@lastPage" class="btn btn-primary" id="PageButton">
-                                    @lastPage
-                                </a>
-                                break;
-                            }
-                            if (i == Model.PageId)
-                            {
-                                <a class="btn alert-primary disabled" id="CurrentPageButton"> @i </a>
-                            }
-                            else
-                            {
-                                <a asp-action="Index" asp-route-pageId="@i" class="btn btn-primary" id="PageButton"> @i </a>
-                            }
-                            pageNumbersCounter++;
-                        }
+                    @if (User.IsInRole(SD.RoleOwner))
+                    {
+                        <a asp-controller="Announcement" asp-action="Create" class="btn btn-success m-1"> Dodaj ogłoszenie</a>
                     }
                 </div>
-            </div>
+                <div class="col-sm-6">
+                    <div class="card-header float-end m-2 text-primary">
+                        @{
+                            int pageNumbersCounter = 1;
+                            <label id="PageLabel">Strony:</label>
+                            if (Model.PageId > 2)
+                            {
+                                <a asp-action="Index" asp-route-pageId="1" class="btn btn-primary" id="PageButton"> 1 </a>
+                                if (Model.PageId > 3)
+                                {
+                                    <label> ... </label>
+                                }
+                            }
+                            double lastPage = Math.Ceiling(Model.Announcements.Count() / (double)postsPerPage);
+                            for (int i = Model.PageId-1; i <= lastPage; i++)
+                            {
+                                if (i < 1)
+                                {
+                                    i = 1;
+                                }
+                                if (pageNumbersCounter == 4 && i != lastPage)
+                                {
+                                    <label> ... </label>
+                                    <a asp-action="Index" asp-route-pageId="@lastPage" class="btn btn-primary" id="PageButton">
+                                        @lastPage
+                                    </a>
+                                    break;
+                                }
+                                if (i == Model.PageId)
+                                {
+                                    <a class="btn alert-primary disabled" id="CurrentPageButton"> @i </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Index" asp-route-pageId="@i" class="btn btn-primary" id="PageButton"> @i </a>
+                                }
+                                pageNumbersCounter++;
+                            }
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>

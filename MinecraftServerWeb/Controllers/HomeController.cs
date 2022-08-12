@@ -42,6 +42,10 @@ namespace MinecraftServerWeb.Controllers
 
         public async Task<IActionResult> Index(int pageId=1, int? announcementToExpandId=null)
         {
+            if (pageId < 1)
+            {
+                return BadRequest();
+            }
             IndexViewModel viewModel = new();
             var announcements = _unitOfWork.Announcement.GetAll();
             announcements = announcements.OrderByDescending(e => e.DateCreated);
