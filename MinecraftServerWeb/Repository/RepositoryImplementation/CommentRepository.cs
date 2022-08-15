@@ -9,7 +9,7 @@ namespace MinecraftServerWeb.Repository.RepositoryImplementation
     {
         private readonly AppDbContext _db;
 
-        public PostRepository(AppDbContext db) : base(db)
+        public CommentRepository(AppDbContext db) : base(db)
         {
             _db = db;
         }
