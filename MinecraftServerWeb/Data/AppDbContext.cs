@@ -10,6 +10,7 @@ namespace MinecraftServerWeb.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
 
 
@@ -35,6 +36,14 @@ namespace MinecraftServerWeb.Data
                 .HasMaxLength(200)
                 .HasColumnType("varchar")
                 .HasDefaultValue("User");
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Posts)
+                .WithOne(e => e.Author)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Comments)
+                .WithOne(e => e.Author)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Post>()
                 .Property(e => e.DateCreated)
@@ -45,10 +54,21 @@ namespace MinecraftServerWeb.Data
                 .IsRequired()
                 .HasMaxLength(450)
                 .HasColumnType("nvarchar");
+            modelBuilder.Entity<Post>()
+                .HasMany(e => e.Comments)
+                .WithOne(e => e.Post)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Announcement>()
                 .Property(e => e.Description)
-                .HasMaxLength(2000);
+                .HasMaxLength(3000);
+
+            modelBuilder.Entity<Comment>()
+                .Property(e => e.Content)
+                .HasMaxLength(1500);
+            modelBuilder.Entity<Comment>()
+                .Property(e => e.Rating)
+                .HasDefaultValue(0);
         }
 
     }

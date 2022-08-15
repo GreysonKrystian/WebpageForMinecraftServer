@@ -12,7 +12,5 @@ namespace MinecraftServerWeb.ViewModels
         public LoginModel LoginModel { get; set; }
 
         public int PageId { get; set; }
-
-        public int? AnnouncementToExpandId { get; set; }
     }
 }

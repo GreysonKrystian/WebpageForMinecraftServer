@@ -40,7 +40,7 @@ namespace MinecraftServerWeb.Controllers
             return loginModel;
         }
 
-        public async Task<IActionResult> Index(int pageId=1, int? announcementToExpandId=null)
+        public async Task<IActionResult> Index(int pageId=1)
         {
             if (pageId < 1)
             {
@@ -54,7 +54,6 @@ namespace MinecraftServerWeb.Controllers
             viewModel.Users = _unitOfWork.User.GetAll();
             viewModel.LoginModel = await ConfigureLoginModel();
             viewModel.PageId = pageId;
-            viewModel.AnnouncementToExpandId = announcementToExpandId;
 
             return View(viewModel);
         }

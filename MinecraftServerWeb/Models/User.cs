@@ -11,5 +11,6 @@ namespace MinecraftServerWeb.Models
         public string Rank { get; set; } 
         public string? AvatarUrl { get; set; }
         public virtual ICollection<Post>? Posts { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
     }
 }

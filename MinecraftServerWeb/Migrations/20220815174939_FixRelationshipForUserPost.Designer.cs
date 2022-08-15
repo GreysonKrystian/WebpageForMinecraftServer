@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinecraftServerWeb.Data;
 
@@ -11,9 +12,10 @@ using MinecraftServerWeb.Data;
 namespace MinecraftServerWeb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220815174939_FixRelationshipForUserPost")]
+    partial class FixRelationshipForUserPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,40 +222,6 @@ namespace MinecraftServerWeb.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MinecraftServerWeb.Models.Comment", b =>
-                {
-                    b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"), 1L, 1);
-
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(1500)
-                        .HasColumnType("nvarchar(1500)");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.HasKey("CommentId");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Comments", (string)null);
-                });
-
             modelBuilder.Entity("MinecraftServerWeb.Models.Post", b =>
                 {
                     b.Property<int>("PostId")
@@ -284,7 +252,7 @@ namespace MinecraftServerWeb.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Post");
                 });
@@ -388,25 +356,6 @@ namespace MinecraftServerWeb.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MinecraftServerWeb.Models.Comment", b =>
-                {
-                    b.HasOne("MinecraftServerWeb.Models.User", "Author")
-                        .WithMany("Comments")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("MinecraftServerWeb.Models.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("MinecraftServerWeb.Models.Post", b =>
                 {
                     b.HasOne("MinecraftServerWeb.Models.User", "Author")
@@ -427,15 +376,8 @@ namespace MinecraftServerWeb.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MinecraftServerWeb.Models.Post", b =>
-                {
-                    b.Navigation("Comments");
-                });
-
             modelBuilder.Entity("MinecraftServerWeb.Models.User", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618

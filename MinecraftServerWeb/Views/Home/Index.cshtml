@@ -101,7 +101,7 @@
                                 }
                                 <div class="row align-items-end">
                                     <div class="col-md-6">
-                                        <a asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2"> Komentarze </a>
+                                        <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2"> Komentarze </a>
                                     </div>
                                     <div class="col-md-6">
                                         <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
