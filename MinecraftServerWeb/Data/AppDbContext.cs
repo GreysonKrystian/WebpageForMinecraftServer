@@ -13,6 +13,12 @@ namespace MinecraftServerWeb.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,7 +49,7 @@ namespace MinecraftServerWeb.Data
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Comments)
                 .WithOne(e => e.Author)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             modelBuilder.Entity<Post>()
                 .Property(e => e.DateCreated)
