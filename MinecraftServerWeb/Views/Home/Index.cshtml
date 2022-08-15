@@ -56,8 +56,9 @@
                         
                     for (int postIndex = (Model.PageId - 1) * postsPerPage; postIndex < Model.Announcements.Count() && postIndex != (Model.PageId - 1) * postsPerPage + postsPerPage; postIndex++)
                     {
+                        <!-- Side info -->
                         var post = Model.Announcements.ElementAt(postIndex);
-                        User? author = Model.Users.FirstOrDefault(e => e.Id == post.Author.Id);
+                        User? author = Model.Users.FirstOrDefault(e => e.Id == post.AuthorId);
                         <div class="row">
                             <div class="col-sm-2 text-center pe-1 mt-3 mb-3">
                                 <div class="card border-start py-2 me-1">
@@ -89,7 +90,7 @@
 
                                         <p class="form-control" readonly>
                                             @String.Join(" ", post.Content.Split(" ").Take(maximumShownWords))....
-                                            <a class="link-primary fw-bold">czytaj całość</a>
+                                            <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="link-primary fw-bold">czytaj całość</a>
                                         </p>
                                     }
                                     else
@@ -103,10 +104,13 @@
                                     <div class="col-md-6">
                                         <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2"> Komentarze </a>
                                     </div>
-                                    <div class="col-md-6">
-                                        <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
-                                        <a asp-controller="Announcement" asp-action="Delete" asp-route-announcementId="@post.PostId" class="btn btn-danger m-2 float-end"> Usuń </a>
-                                    </div>
+                                    @if ( User.FindFirstValue(ClaimTypes.NameIdentifier) == post.AuthorId)
+                                    {
+                                        <div class="col-md-6">
+                                            <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
+                                            <a asp-controller="Announcement" asp-action="Delete" asp-route-announcementId="@post.PostId" class="btn btn-danger m-2 float-end"> Usuń </a>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -156,7 +160,7 @@
             <!-- Bottom buttons-->
             <div class="row">
                 <div class="col-3 m-3">
-                    @if (User.IsInRole(SD.RoleOwner))
+                    @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
                     {
                         <a asp-controller="Announcement" asp-action="Create" class="btn btn-success m-1"> Dodaj ogłoszenie</a>
                     }
@@ -206,3 +210,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

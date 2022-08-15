@@ -108,9 +108,11 @@ namespace MinecraftServerWeb.Controllers
         }
 
         // GET: Announcement/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int announcementId)
         {
-            return View();
+            Announcement announcement = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
+            return View(announcement);
         }
     }
 }

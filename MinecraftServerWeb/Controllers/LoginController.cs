@@ -17,7 +17,7 @@ namespace MinecraftServerWeb.Controllers
             
         }
 
-        public async Task<IActionResult> Login(string returnUrl = null)
+        public async Task<IActionResult> Login(string returnUrl = "~/Login/Login")
         {
             LoginModel loginModel = new();
             if (!string.IsNullOrEmpty(loginModel.ErrorMessage))
@@ -42,7 +42,6 @@ namespace MinecraftServerWeb.Controllers
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
             loginModel.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            loginModel.ReturnUrl = Url.Content("~/");
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -51,7 +50,7 @@ namespace MinecraftServerWeb.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(loginModel.ReturnUrl);
+                    return RedirectToAction(nameof(Index), "Home"); //TODO create local redirect
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -68,8 +67,6 @@ namespace MinecraftServerWeb.Controllers
                     return View(loginModel);
                 }
             }
-
-            // If we got this far, something failed, redisplay form
             return View(loginModel);
         }
     }

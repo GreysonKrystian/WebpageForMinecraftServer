@@ -31,6 +31,7 @@ namespace MinecraftServerWeb.Controllers
                 ModelState.AddModelError(string.Empty, loginModel.ErrorMessage);
             }
 
+            loginModel.ReturnUrl = "~/";
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -56,42 +57,6 @@ namespace MinecraftServerWeb.Controllers
             viewModel.PageId = pageId;
 
             return View(viewModel);
-        }
-
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> Index(IndexViewModel viewModel)
-        {
-            viewModel.LoginModel.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            viewModel.LoginModel.ReturnUrl = Url.Content("~/");
-            if (ModelState.IsValid)
-            {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(viewModel.LoginModel.Input.Email, viewModel.LoginModel.Input.Password, viewModel.LoginModel.Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _loginLogger.LogInformation("User logged in.");
-                    return LocalRedirect(viewModel.LoginModel.ReturnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = viewModel.LoginModel.ReturnUrl, RememberMe = viewModel.LoginModel.Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _loginLogger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View();
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View();
         }
 
         public IActionResult Rules()
