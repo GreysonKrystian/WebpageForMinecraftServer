@@ -102,7 +102,8 @@
                                 }
                                 <div class="row align-items-end">
                                     <div class="col-md-6">
-                                        <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2"> Komentarze </a>
+                                        <!--<a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2"> -->
+                                        <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2" role="button"> Komentarze (@Model.Comments.Count(e => e.PostId == post.PostId)) </a>
                                     </div>
                                     @if ( User.FindFirstValue(ClaimTypes.NameIdentifier) == post.AuthorId)
                                     {

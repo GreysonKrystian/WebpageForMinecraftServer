@@ -6,7 +6,7 @@ namespace MinecraftServerWeb.Repository.Interfaces
     {
         public IPostRepository Post {get;}
         public IUserRepository User {get;}
-
+        public ICommentRepository Comment {get;}
         public IAnnouncementRepository Announcement {get;}
         void Commit();
     }

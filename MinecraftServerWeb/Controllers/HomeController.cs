@@ -55,7 +55,7 @@ namespace MinecraftServerWeb.Controllers
             viewModel.Users = _unitOfWork.User.GetAll();
             viewModel.LoginModel = await ConfigureLoginModel();
             viewModel.PageId = pageId;
-
+            viewModel.Comments = _unitOfWork.Comment.GetAll();
             return View(viewModel);
         }
 

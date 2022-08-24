@@ -8,7 +8,7 @@ namespace MinecraftServerWeb.ViewModels
         public IEnumerable<Announcement> Announcements { get; set; }
         public IEnumerable<User> Users { get; set; }  
 
-
+        public IEnumerable<Comment> Comments { get; set; }
         public LoginModel LoginModel { get; set; }
 
         public int PageId { get; set; }
