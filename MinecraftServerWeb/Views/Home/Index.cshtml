@@ -109,7 +109,7 @@
                                     {
                                         <div class="col-md-6">
                                             <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
-                                            <a asp-controller="Announcement" asp-action="Delete" asp-route-announcementId="@post.PostId" class="btn btn-danger m-2 float-end"> Usuń </a>
+                                            <a class="btn btn-danger m-2 float-end" onclick=Delete('/>Announcement/Delete/'+${@post.PostId)> Usuń </a>
                                         </div>
                                     }
                                 </div>
@@ -214,4 +214,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script> function Delete() 
+    {
+
+
+    }</script>
 }

@@ -86,27 +86,6 @@ namespace MinecraftServerWeb.Controllers
             }
         }
 
-        // GET: Announcement/Delete/5
-        public ActionResult Delete(int announcementId)
-        {
-            return View();
-        }
-
-        // POST: Announcement/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int announcementId, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index), controllerName:"Home");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // GET: Announcement/Details/5
         [AllowAnonymous]
         public ActionResult Details(int announcementId)
@@ -114,5 +93,31 @@ namespace MinecraftServerWeb.Controllers
             Announcement announcement = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
             return View(announcement);
         }
+
+        #region API CALLS
+            
+        // GET: Announcement/GetAnnouncement/5
+        public ActionResult GetAnnouncement(int announcementId)
+        {
+            Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
+            return Json(new {data = post});
+        }
+
+        // DELETE: Announcement/Delete/5
+        [HttpDelete]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int announcementId)
+        {
+            Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
+            if (post == null)
+            {
+                return Json(new { success = false, message = "Cannot delete this announcement." });
+            }
+            _unitOfWork.Announcement.Remove(post);
+            _unitOfWork.Commit();
+            return Json(new { success = true, message = "Successful delete of the announcement." });
+        }
+        
+        #endregion
     }
 }

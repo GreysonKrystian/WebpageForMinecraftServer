@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using MinecraftServerWeb.Utility
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -20,22 +25,29 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Strona Główna</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Rules">Rules</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Rules">Zasady</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Forum">Forum</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Map">Server Map</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Map">Mapa Serwera</a>
                     </li>
                 </ul>
                 <ul class="nav nav-pills">
+                @if (SignInManager.IsSignedIn(User))
+                {
                     <li class="nav-item ms-auto ms-1">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="UserPanel">User Panel</a>
+                        <a class="nav-link" asp-area="" asp-controller="UserPanel" asp-action="Index">Panel Użytkownika</a>
                     </li>
+                    @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
+                    {
+                        <a asp-controller="AdminPanel" asp-action="Index" class="btn btn-danger m-1"> Panel Administratora</a>
+                    }
+                }
                     <partial name="_LoginNavbarPartial"/>
                 </ul>
 
