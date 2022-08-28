@@ -54,6 +54,7 @@ namespace MinecraftServerWeb.Controllers
         }
 
         // GET: Announcement/Edit/5
+        [Route("Announcement/Edit/{announcementId}")]
         public ActionResult Edit(int announcementId)
         {
             Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
@@ -97,6 +98,7 @@ namespace MinecraftServerWeb.Controllers
         #region API CALLS
             
         // GET: Announcement/GetAnnouncement/5
+        [Route("Announcement/GetAnnouncement/{announcementId}")]
         public ActionResult GetAnnouncement(int announcementId)
         {
             Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
@@ -104,11 +106,17 @@ namespace MinecraftServerWeb.Controllers
         }
 
         // DELETE: Announcement/Delete/5
-        [HttpDelete]
-        [ValidateAntiForgeryToken]
+        /*[HttpDelete("Announcement/Delete/{announcementId:int}")]
+        [ValidateAntiForgeryToken]*/ // It should be HTTPDelete but somehow throws error 405 TODO
+        [Route("Announcement/Delete/{announcementId:int}")]
         public ActionResult Delete(int announcementId)
         {
             Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
+            string userId = _userManager.GetUserId(User);
+            if(userId != post.AuthorId)
+            {
+                return Unauthorized();
+            }
             if (post == null)
             {
                 return Json(new { success = false, message = "Cannot delete this announcement." });

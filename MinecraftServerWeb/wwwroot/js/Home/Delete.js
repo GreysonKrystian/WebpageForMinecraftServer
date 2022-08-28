@@ -6,18 +6,23 @@
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Potwierdź',
+        cancelButtonText: 'Anuluj'
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
                 url: url,
-                type: 'DELETE',
-                success:
+                type: "DELETE",
+                success: function() {
                     Swal.fire(
                         'Sukces',
                         `Post o nazwie: ${postTitle} został usunięty`,
                         'success'
-                    )
+                    ).then(
+                        function() {
+                            location.reload();
+                        });
+                }
             });
         }
     });
