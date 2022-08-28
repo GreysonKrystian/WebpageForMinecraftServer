@@ -105,11 +105,11 @@
                                         <!--<a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2"> -->
                                         <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2" role="button"> Komentarze (@Model.Comments.Count(e => e.PostId == post.PostId)) </a>
                                     </div>
-                                    @if ( User.FindFirstValue(ClaimTypes.NameIdentifier) == post.AuthorId)
+                                    @if( User.FindFirstValue(ClaimTypes.NameIdentifier) == post.AuthorId)
                                     {
                                         <div class="col-md-6">
                                             <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
-                                            <a class="btn btn-danger m-2 float-end" onclick=Delete('/>Announcement/Delete/'+${@post.PostId)> Usuń </a>
+                                            <a class="btn btn-danger m-2 float-end" onclick="DeletePost( '@post.Title', '/Announcement/Delete/@post.PostId' )"> Usuń </a>
                                         </div>
                                     }
                                 </div>
@@ -214,9 +214,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script> function Delete() 
-    {
-
-
-    }</script>
+    <script src="js/Home/Delete.js"></script>
 }
