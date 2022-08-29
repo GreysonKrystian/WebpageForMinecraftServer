@@ -52,7 +52,31 @@ namespace MinecraftServerWeb.Controllers
                 return View();
             }
         }
-
+        // POST: Announcement/AddComment/
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddComment(int announcementId, string content)
+        {
+            Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
+            if (content == null)
+            {
+                return BadRequest();
+            }
+            if (post.AuthorId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                return Unauthorized();
+            }
+            Comment comment = new()
+            {
+                AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                Content = content,
+                PostId = announcementId
+            };
+            _unitOfWork.Comment.Add(comment);
+            _unitOfWork.Commit();
+            return new AcceptedResult();
+        }
         // GET: Announcement/Edit/5
         [Route("Announcement/Edit/{announcementId}")]
         public ActionResult Edit(int announcementId)
