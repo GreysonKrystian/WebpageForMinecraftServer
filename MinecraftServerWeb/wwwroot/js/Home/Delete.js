@@ -1,4 +1,5 @@
 ﻿function DeletePost(postTitle, url) {
+    var token = $('input[name="__RequestVerificationToken"]').val();
     Swal.fire({
         title: `Czy na pewno chcesz usunąć post o nazwie ${postTitle}?`,
         text: "Tej operacji nie będzie można cofnąć!",
@@ -13,6 +14,9 @@
             $.ajax({
                 url: url,
                 type: "DELETE",
+                data: {
+                    __RequestVerificationToken: token
+                },
                 success: function() {
                     Swal.fire(
                         'Sukces',

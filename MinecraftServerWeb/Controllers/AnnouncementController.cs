@@ -63,7 +63,7 @@ namespace MinecraftServerWeb.Controllers
             {
                 return BadRequest();
             }
-            if (post.AuthorId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            if (null == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 return Unauthorized();
             }
@@ -130,8 +130,8 @@ namespace MinecraftServerWeb.Controllers
         }
 
         // DELETE: Announcement/Delete/5
-        /*[HttpDelete("Announcement/Delete/{announcementId:int}")]
-        [ValidateAntiForgeryToken]*/ // It should be HTTPDelete but somehow throws error 405 TODO
+        [HttpDelete("Announcement/Delete/{announcementId:int}")]
+        [ValidateAntiForgeryToken]
         [Route("Announcement/Delete/{announcementId:int}")]
         public ActionResult Delete(int announcementId)
         {

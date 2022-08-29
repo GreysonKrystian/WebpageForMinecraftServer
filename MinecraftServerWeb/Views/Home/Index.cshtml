@@ -50,13 +50,13 @@
                     if (postsPerPage <= 0)
                     #pragma warning disable CS0162
                     {
-                        throw new ArgumentOutOfRangeException("Number of posts must be positive value"); 
+                        throw new ArgumentOutOfRangeException(); 
                     }
                     #pragma warning restore CS0162
                         
                     for (int postIndex = (Model.PageId - 1) * postsPerPage; postIndex < Model.Announcements.Count() && postIndex != (Model.PageId - 1) * postsPerPage + postsPerPage; postIndex++)
                     {
-                        <!-- Side info -->
+                        <!-- Author info -->
                         var post = Model.Announcements.ElementAt(postIndex);
                         User? author = Model.Users.FirstOrDefault(e => e.Id == post.AuthorId);
                         <div class="row">
@@ -100,18 +100,34 @@
                                         </p>
                                     }
                                 }
+
+                                <!-- Buttons for each announcement-->
                                 <div class="row align-items-end">
                                     <div class="col-md-6">
                                         <!--<a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2"> -->
-                                        <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="btn btn-primary fw-bold float-start mb-2" role="button"> Komentarze (@Model.Comments.Count(e => e.PostId == post.PostId)) </a>
+                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#Current_@post.PostId" role="button" aria-expanded="false" aria-controls="#Current_@post.PostId"> Komentarze (@Model.Comments.Count(e => e.PostId == post.PostId)) </a>
                                     </div>
                                     @if( User.FindFirstValue(ClaimTypes.NameIdentifier) == post.AuthorId)
                                     {
                                         <div class="col-md-6">
+                                            @Html.AntiForgeryToken()
                                             <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
-                                            <a class="btn btn-danger m-2 float-end" onclick="DeletePost( '@post.Title', '/Announcement/Delete/@post.PostId' )"> Usuń </a>
+                                            <a class="btn btn-danger m-2 float-end" onclick="DeletePost('@post.Title', '/Announcement/Delete/@post.PostId')"> Usuń </a>
                                         </div>
                                     }
+                                </div>
+                                <div class="collapse mt-2" id="Current_@post.PostId">
+                                    <div class="card card-body">
+                                        Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                                    </div>
+                                </div>
+                                <!-- Comment an announcement -->
+                                <div class="d-flex flex-row mt-3 mb-2">
+                                    <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded-circle shadow-lg mx-auto d-block mb-1 me-1"
+                                         style="padding: 5px; width: auto; height: 60px" alt="image of user"/>
+                                    @Html.AntiForgeryToken()
+                                    <textarea style="resize: none;" type="text" class="form-control me-3" placeholder="Dodaj komentarz" id="CommentForm_@post.PostId"></textarea>
+                                    <button class="btn btn-primary" type="button" onclick="addComment(@post.PostId)"> Dodaj komentarz </button>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +174,7 @@
                     }
                 </div>
             </div>
-            <!-- Bottom buttons-->
+            <!-- Bottom of page buttons-->
             <div class="row">
                 <div class="col-3 m-3">
                     @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
@@ -167,6 +183,7 @@
                     }
                 </div>
                 <div class="col-sm-6">
+                    <!--  navigation pages buttons -->
                     <div class="card-header float-end m-2 text-primary">
                         @{
                             int pageNumbersCounter = 1;
@@ -180,7 +197,7 @@
                                 }
                             }
                             double lastPage = Math.Ceiling(Model.Announcements.Count() / (double)postsPerPage);
-                            for (int i = Model.PageId-1; i <= lastPage; i++)
+                            for (int i = Model.PageId - 1; i <= lastPage; i++)
                             {
                                 if (i < 1)
                                 {
@@ -215,4 +232,5 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="js/Home/Delete.js"></script>
+    <script src="js/Home/Comments.js"></script>
 }
