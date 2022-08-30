@@ -9,5 +9,7 @@
         public int Rating { get; set; }
         public virtual Post Post { get; set; }
         public int PostId { get; set; }
+        public DateTime DateCreated { get; set; }
+
     }
 }

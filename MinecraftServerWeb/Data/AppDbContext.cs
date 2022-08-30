@@ -75,6 +75,10 @@ namespace MinecraftServerWeb.Data
             modelBuilder.Entity<Comment>()
                 .Property(e => e.Rating)
                 .HasDefaultValue(0);
+            modelBuilder.Entity<Comment>()
+                .Property(e => e.DateCreated)
+                .IsRequired()
+                .HasDefaultValueSql("getdate()");
         }
 
     }
