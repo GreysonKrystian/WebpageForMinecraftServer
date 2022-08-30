@@ -1,44 +1,62 @@
 ﻿@using System.Security.Claims
-@model MinecraftServerWeb.Models.Announcement
+@model AnnouncementViewModel
 
-@{
-    ViewData["Title"] = "Detale Ogłoszenia";
+
+<div>
+    <div>
+        <div class="text-center">
+            <h1>@Model.Announcement.Title</h1>
+        </div>
+        <hr/>
+        <div class="row text-primary m-1">
+            <h3> @Model.Announcement.Description </h3>
+        </div>
+        <hr/>
+        <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block mb-2"
+             style="padding-top: 5px; width: auto; height: 300px" alt="announcement image"/>
+        <hr/>
+        <div class="row mt-2 offset-sm-1">
+            <p> @Model.Announcement.Content </p>
+        </div>
+        <div class="row mt-1 text-end">
+            <h6>  @Model.Announcement.DateCreated </h6>
+        </div>
+        <hr/>
+    </div> 
+
+    <div class="col-9 offset-sm-1">
+        @foreach (Comment comment in Model.Comments.Where(e => e.PostId == Model.Announcement.PostId))
+        {
+            User? commentAuthor = Model.Users.FirstOrDefault(e => e.Id == comment.AuthorId);
+            CommentViewModel commentViewModel = new CommentViewModel
+            {
+                Comment = comment,
+                CommentAuthor = commentAuthor
+            };
+            <partial name="_Comment" for="@commentViewModel"/>
+        }
+        <!-- Comment an announcement -->
+        <div class="d-flex flex-row mt-3 mb-2">
+            <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded-circle shadow-lg mx-auto d-block mb-1 me-1"
+                 style="padding: 5px; width: auto; height: 60px" alt="image of user"/>
+            @Html.AntiForgeryToken()
+            <textarea style="resize: none;" type="text" class="form-control me-3" placeholder="Dodaj komentarz" id="CommentForm_@Model.Announcement.PostId"></textarea>
+            <button class="btn btn-primary" type="button" onclick="addComment(@Model.Announcement.PostId)"> Dodaj komentarz </button>
+        </div>
+    </div>
+    <hr/>
+    <div>
+        @if( User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Announcement.AuthorId)
+        {
+            <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@Model.Announcement.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
+            <a class="btn btn-danger m-2 float-end" onclick="DeletePost('@Model.Announcement.Title', '/Announcement/Delete/@Model.Announcement.PostId')"> Usuń </a>
+        }
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary m-2">Powrót do strony głównej</a>
+    </div>
+</div>
+
+        
+@section Scripts {
+    <script src="/js/Home/Delete.js"></script>
+    <script src="/js/Home/Comments.js"></script>
 }
-<div>
-    <h4>@ViewData["Title"]</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-    </dl>
-</div>
-<div>
-    @if( User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.AuthorId)
-    {
-        <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@Model.PostId" class="btn btn-warning m-2 float-end"> Edytuj </a>
-        <a asp-controller="Announcement" asp-action="Delete" asp-route-announcementId="@Model.PostId" class="btn btn-danger m-2 float-end"> Usuń </a>
-    }
-    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary m-2">Powrót do strony głównej</a>
-</div>

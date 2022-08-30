@@ -3,7 +3,7 @@
     var content = $("#CommentForm_" + postId).val();
     $.ajax({
         type: "POST",
-        url: 'Announcement/AddComment/',
+        url: '/Announcement/AddComment/',
         data: {
             announcementId:postId,
             content: content,

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MinecraftServerWeb.Models;
 using MinecraftServerWeb.Repository.Interfaces;
 using MinecraftServerWeb.Utility;
+using MinecraftServerWeb.ViewModels;
 
 namespace MinecraftServerWeb.Controllers
 {
@@ -58,7 +59,6 @@ namespace MinecraftServerWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddComment(int announcementId, string content)
         {
-            Announcement? post = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
             if (content == null)
             {
                 return BadRequest();
@@ -116,7 +116,15 @@ namespace MinecraftServerWeb.Controllers
         public ActionResult Details(int announcementId)
         {
             Announcement announcement = _unitOfWork.Announcement.GetFirstOrDefault(e => e.PostId == announcementId);
-            return View(announcement);
+            var comments = _unitOfWork.Comment.GetAll();
+            var users = _unitOfWork.User.GetAll();
+            AnnouncementViewModel announcementViewModel = new AnnouncementViewModel
+            {
+                Announcement = announcement,
+                Comments = comments,
+                Users = users
+            };
+            return View(announcementViewModel);
         }
 
         #region API CALLS
