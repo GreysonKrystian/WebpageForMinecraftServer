@@ -1,0 +1,27 @@
+﻿
+
+<div>
+    <div class="text-center">
+        <h1> Panel Administratora </h1>
+    </div>
+    <table id="UsersList" class="table table-striped" style="width:100%">
+        <thead>
+        <tr>
+            <th> Nazwa na forum </th>
+            <th> Nazwa w grze </th>
+            <th> Email </th>
+            <th> Ranga </th>
+            <th> Data Dołączenia </th>
+            <th></th>
+        </tr>
+        </thead>
+
+    </table>
+</div>
+<div class="mt-4 mb-4">
+    <a asp-controller="Announcement" asp-action="Create" class="btn btn-success m-1"> Dodaj ogłoszenie</a>
+</div>
+
+@section Scripts {
+    <script src="/js/Admin/UserTable.js"></script>
+}

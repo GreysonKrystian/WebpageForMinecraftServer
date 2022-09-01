@@ -106,8 +106,10 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account
 
             [Display(Name = "Nick na forum")] 
             [StringLength(100, ErrorMessage = "{0} musi mieć od {2} do {1} znaków.", MinimumLength = 6)]
+            #nullable enable
             public string? ForumNickname { get; set; }
             public string? AvatarUrl { get; set; }
+            #nullable disable
         }
 
 

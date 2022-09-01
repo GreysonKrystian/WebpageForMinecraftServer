@@ -11,14 +11,10 @@ namespace MinecraftServerWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _homeLogger;
-        private readonly ILogger<LoginModel> _loginLogger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly SignInManager<IdentityUser> _signInManager;
-        public HomeController(ILoggerFactory loggerFactory, IUnitOfWork unitOfWork, SignInManager<IdentityUser> signInManager)
+        public HomeController(IUnitOfWork unitOfWork, SignInManager<IdentityUser> signInManager)
         {
-            _homeLogger = loggerFactory.CreateLogger<HomeController>();
-            _loginLogger = loggerFactory.CreateLogger<LoginModel>();
             _unitOfWork = unitOfWork;
             _signInManager = signInManager;
         }

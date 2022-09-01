@@ -7,7 +7,7 @@ using MinecraftServerWeb.Models;
 using MinecraftServerWeb.Utility.Exceptions;
 
 
-namespace MinecraftServerWeb.Utility
+namespace MinecraftServerWeb.Utility.DiscordHandlers
 {
     public class DiscordHookHandler : IDiscordHookHandler
     {
@@ -22,7 +22,7 @@ namespace MinecraftServerWeb.Utility
         public async Task SendDiscordMessage(Post post)
         {
             using var client = new DiscordWebhookClient("https://discord.com/api/webhooks" + _discordIdAndToken);
-            await client.SendMessageAsync(text: post.Content, 
+            await client.SendMessageAsync(text: post.Content,
                 username: post.Author.ServerNickname,
                 avatarUrl: post.Author.AvatarUrl);
         }

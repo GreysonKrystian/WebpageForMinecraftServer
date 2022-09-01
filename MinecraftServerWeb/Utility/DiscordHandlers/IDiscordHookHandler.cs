@@ -1,6 +1,6 @@
 ﻿using MinecraftServerWeb.Models;
 
-namespace MinecraftServerWeb.Utility
+namespace MinecraftServerWeb.Utility.DiscordHandlers
 {
     public interface IDiscordHookHandler
     {
