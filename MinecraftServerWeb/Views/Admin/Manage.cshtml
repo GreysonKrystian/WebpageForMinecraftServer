@@ -1,4 +1,5 @@
-﻿
+﻿ @inject UserManager<IdentityUser> UserManager
+ @model IEnumerable<User>
 
 <div>
     <div class="text-center">
@@ -24,4 +25,8 @@
 
 @section Scripts {
     <script src="/js/Admin/UserTable.js"></script>
+    <script>
+        var CurrentUserId = '@Html.Raw(UserManager.GetUserAsync(User).GetAwaiter().GetResult().Id)';
+        var Users = @Json.Serialize(Model);
+    </script>
 }

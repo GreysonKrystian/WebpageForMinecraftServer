@@ -16,7 +16,8 @@ namespace MinecraftServerWeb.Controllers
         }
         public IActionResult Manage()
         {
-            return View();
+            var users = _unitOfWork.User.GetAll();
+            return View(users);
         }
         #region API CALLS
 

@@ -1,9 +1,6 @@
 ﻿$(document).ready(function () {
     $("#UsersList").dataTable({
-        "ajax": {
-            "url": "/Admin/GetAllUsers/",
-            "type": "GET"
-        },
+        "data": window.Users,
         "columnDefs": [
             {
                 targets: 4,
@@ -16,13 +13,22 @@
             { "data": "rank", "width": "10%" },
             { "data": "dateCreated", "width": "15%" },
             {
-                "data": "id", "width": "10%", "render": function(data) {
-                    return `
-                        <div class="row">
-                            <a class="btn btn-danger" href="/Admin/LockAccount/${data}"> Blokada </a>
-                            <a class="btn btn-warning mt-2" href="/Admin/MuteAccount/${data}"> Wyciszenie </a>
-                            <a class="btn btn-info mt-2" href="/Admin/AccountInfo/${data}"> Informacje </a>
-                        </div>`;
+                "data": "id", "width": "10%", "render": function (data, type, row, meta) {
+                    if (window.CurrentUserId !== data) {
+                        return `
+                            <div class="row">
+                                <a class="btn btn-secondary" onclick="ManageUser('${data}','${row.forumNickname}')">
+                                Zarządzaj Użytkownikiem 
+                                </a>
+                            </div>`;
+                    } else {
+                        return`
+                            <div class="row">
+                                <a class="btn btn-success">
+                                Obecnie Zalogowany 
+                                </a>
+                            </div>`;
+                    }
                 }
             }
         ],
@@ -48,3 +54,17 @@
         }
     });
 });
+
+function ManageUser(id, name) {
+    window.Swal.fire({
+        title: "Wybierz operację dla użytkownika: " + name,
+        icon: 'question',
+        showCloseButton: true,
+        showConfirmButton: false,
+        html: ` 
+            <a id="InfoButton" class="btn btn-info me-3" href="/Admin/LockAccount/${id}"> Informacje </a>
+            <a id="InfoButton" class="btn btn-warning me-3" href="/Admin/MuteAccount/${id}"> Wyciszenie </a>
+            <a id="InfoButton" class="btn btn-danger" href="/Admin/AccountInfo/${id}"> Blokada </a>
+        `,
+    });
+}
