@@ -1,0 +1,23 @@
+﻿@model User
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Image of User" class="rounded-circle" width="150">
+                    <div class="mt-3">
+                        <h3>Nazwa na forum: @Model.ForumNickname</h3>
+                        <h5>Nazwa na serwerze: @Model.ServerNickname</h5>
+                        <p class="text-secondary mb-1">Ranga: @Model.Rank</p>
+                        <p class="text-muted"><small>Dołączył: @Model.DateCreated </small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offset-3 mt-3">
+            <a id="MuteButton" class="btn btn-warning me-3" href="/Admin/MuteAccount/@Model.Id"> Wyciszenie </a>
+            <a id="BanButton" class="btn btn-danger" href="/Admin/LockAccount/@Model.Id"> Blokada </a>
+        </div>
+    </div>
+</div>
