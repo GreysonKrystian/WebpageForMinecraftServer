@@ -8,7 +8,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>@ViewData["Title"] - MinecraftServerWeb</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/MinecraftServerWeb.styles.css" asp-append-version="true"/>
     <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"/>
@@ -30,18 +30,18 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Rules">Zasady</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Forum">Forum</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Map">Mapa Serwera</a>
-                    </li>
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Forum">Forum</a> *@
+                    @* </li> *@
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Map">Mapa Serwera</a> *@
+                    @* </li> *@
                 </ul>
                 <ul class="nav nav-pills">
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <li class="nav-item ms-auto ms-1">
-                        <a class="nav-link" asp-area="" asp-controller="UserPanel" asp-action="Index">Panel Użytkownika</a>
+                        @*<a class="nav-link" asp-area="" asp-controller="UserPanel" asp-action="Index">Panel Użytkownika</a> *@
                     </li>
                     @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
                     {
