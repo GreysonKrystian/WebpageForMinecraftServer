@@ -15,15 +15,16 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" 
+         style="background-color: #6F42C1">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MinecraftServerWeb</a>
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MinecraftWeb</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="nav nav-pills">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Strona Główna</a>
                     </li>
@@ -37,15 +38,18 @@
                     @*     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Map">Mapa Serwera</a> *@
                     @* </li> *@
                 </ul>
-                <ul class="nav nav-pills">
+                <ul class="navbar-nav">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <li class="nav-item ms-auto ms-1">
-                        @*<a class="nav-link" asp-area="" asp-controller="UserPanel" asp-action="Index">Panel Użytkownika</a> *@
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Panel Użytkownika</a>
                     </li>
                     @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
                     {
-                        <a asp-controller="Admin" asp-action="ManageUsers" class="btn btn-danger m-1"> Panel Administratora</a>
+                        <li>
+                            
+                        </li>
+                        <a asp-controller="Admin" asp-action="ManageUsers" class="nav-link"> Panel Administratora</a>
                     }
                 }
                     <partial name="_LoginNavbarPartial"/>
