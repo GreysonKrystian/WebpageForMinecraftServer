@@ -5,8 +5,8 @@
     <div class="text-center">
         <h1> Panel Administratora </h1>
     </div>
-    <table id="UsersList" class="table table-striped" style="width:100%">
-        <thead>
+    <table id="UsersList" class="table table-dark row-border" style="width:100%">
+        <thead style="border-bottom: 1px solid white">
         <tr>
             <th> Nazwa na forum </th>
             <th> Nazwa w grze </th>
@@ -20,7 +20,7 @@
     </table>
 </div>
 <div class="mt-4 mb-4">
-    <a asp-controller="Announcement" asp-action="Create" class="btn btn-success m-1"> Dodaj ogłoszenie</a>
+    <a asp-controller="Announcement" asp-action="Create" class="btn btn-outline-success m-1"> Dodaj ogłoszenie</a>
 </div>
 
 @section Scripts {
