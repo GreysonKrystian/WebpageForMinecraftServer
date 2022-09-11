@@ -42,7 +42,7 @@
                         <div class="row">
                             <div class="col-sm-2 text-center pe-2 mt-3 ms-4">
                                 <div class="card border-start py-2 me-1">
-                                    <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block mb-2"
+                                    <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="img-fluid rounded mx-auto d-block mb-2"
                                          style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
                                     <div class="mt-2 badge bg-primary text-wrap"> @author.ForumNickname </div>
                                     <div class="mt-2 badge bg-danger text-wrap"> @author.Rank </div>
@@ -117,8 +117,8 @@
                                 {
                                     <!-- create comment for announcement -->
                                     <div class="d-flex flex-row mt-3 mb-4">
-                                        <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded-circle shadow-lg mx-auto d-block mb-1 me-1"
-                                             style="padding: 5px; width: auto; height: 60px" alt="image of user"/>
+                                        <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="img-fluid shadow-lg mx-auto d-block mb-1 me-1 mt-1"
+                                             style="padding: 5px; width: 70px; height: 70px" alt="image of user"/>
                                         @Html.AntiForgeryToken()
                                         <textarea style="resize: none;" type="text" class="form-control me-3" placeholder="Dodaj komentarz" id="CommentForm_@post.PostId"></textarea>
                                         <button class="btn btn-primary" type="button" onclick="addComment(@post.PostId)"> Dodaj komentarz </button>
@@ -141,9 +141,9 @@
                 }
                 else
                 {
-                    <div class="card shadow h-100 py-2 me-1 mt-3">
+                    <div class="card shadow h-100 py-2 me-1 mt-4 border-primary">
                         <div class="card-header py-3">
-                            <h5 class="fw-bold text-primary">
+                            <h5 class="fw-bold text-warning">
                                 Zalogowano jako:
                             </h5>
                             <h6 class="ps-2">
