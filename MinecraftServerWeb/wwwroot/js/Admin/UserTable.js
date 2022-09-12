@@ -64,8 +64,8 @@ function ManageUser(id, name) {
         showConfirmButton: false,
         html: ` 
             <a id="InfoButton" class="btn btn-outline-info me-3" href="/Admin/AccountInfo/${id}"> Informacje </a>
-            <a id="MuteButton" class="btn btn-outline-warning me-3" href="/Admin/MuteAccount/${id}"> Wyciszenie </a>
-            <a id="BanButton" class="btn btn-outline-danger" href="/Admin/LockAccount/${id}"> Blokada </a>
+            <a id="MuteButton" class="btn btn-outline-warning me-3" href="/Admin/MuteAccountManager/${id}"> Wyciszenie </a>
+            <a id="BanButton" class="btn btn-outline-danger" href="/Admin/BlockAccountManager/${id}"> Blokada </a>
         `,
     });
 }
