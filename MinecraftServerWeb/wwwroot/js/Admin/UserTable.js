@@ -9,9 +9,17 @@
         "columns": [
             { "data": "forumNickname", "width": "15%" },
             { "data": "serverNickname", "width": "15%" },
-            { "data": "email", "width": "20%" },
-            { "data": "rank", "width": "10%" },
+            { "data": "email", "width": "15%" },
+            { "data": "rank", "width": "8%" },
             { "data": "dateCreated", "width": "15%" },
+            { "data": "emailConfirmed", "width": "2%", "render": function(data){
+                if (data === true) {
+                    return "TAK";
+                } else {
+                    return "NIE";
+                }
+
+            } },
             {
                 "data": "id", "width": "10%", "render": function (data, type, row, meta) {
                     if (window.CurrentUserId !== data) {
@@ -63,8 +71,8 @@ function ManageUser(id, name) {
         showConfirmButton: false,
         html: ` 
             <a id="InfoButton" class="btn btn-info me-3" href="/Admin/AccountInfo/${id}"> Informacje </a>
-            <a id="MuteButton" class="btn btn-warning me-3" href="/Admin/MuteAccount/${id}"> Wyciszenie </a>
-            <a id="BanButton" class="btn btn-danger" href="/Admin/LockAccount/${id}"> Blokada </a>
+            <a id="MuteButton" class="btn btn-warning me-3" href="/Admin/MuteAccountManager/${id}"> Wyciszenie </a>
+            <a id="BanButton" class="btn btn-danger" href="/Admin/BlockAccountManager/${id}"> Blokada </a>
         `,
     });
 }

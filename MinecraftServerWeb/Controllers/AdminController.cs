@@ -21,7 +21,7 @@ namespace MinecraftServerWeb.Controllers
             return View(users);
         }
 
-        [Route("/{accountId}")]
+        [Route("Admin/MuteAccountManager/{accountId}")]
         public IActionResult MuteAccountManager(string accountId)
         {
             var user = _unitOfWork.User.GetFirstOrDefault(e => e.Id == accountId);
@@ -30,7 +30,7 @@ namespace MinecraftServerWeb.Controllers
             return View(user);
         }
 
-        [Route("/{accountId}")]
+        [Route("Admin/BlockAccountManager/{accountId}")]
         public IActionResult BlockAccountManager(string accountId)
         {
             var user = _unitOfWork.User.GetFirstOrDefault(e => e.Id == accountId);
