@@ -3,22 +3,22 @@
 @model CommentViewModel
 
 @{
-    <div class="row border border-secondary mt-2 mb-1 rounded-3">
-        <div class="col-sm-2 text-center ms-1 mt-1 border-dark border-1 border-end">
-            <div class="card  border border-4">
-                <img src="https://source.unsplash.com/user/c_v_r/400x400" class="img-fluid rounded mx-auto d-block mb-1"
-                     style="padding-top: 5px; width: auto; height: 60px" alt="image of user"/>
-                <h6 class="text-wrap"> @Model.CommentAuthor.ForumNickname </h6>
-                <div class="mb-1 badge bg-danger text-wrap"> @Model.CommentAuthor.Rank </div>
+    <div class="row mt-2 mb-1">
+        <div class="row mb-1">
+            <div class="col-md-8 d-flex align-items-center mb-1">
+                <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="img-thumbnail"
+                style="padding-top: 5px; width: 70px; height: 70px" alt="image of user"/>
+                <h6 class="text-wrap mt-2 ms-2 me-2"> @Model.CommentAuthor.ForumNickname </h6>
+                <div class="badge rounded-pill bg-danger col-sm-3"> @Model.CommentAuthor.Rank </div>
             </div>
         </div>
-        <div class="col-sm-7 align-content-center mt-1 me-2 ms-2">
+        <div class="col-sm-9 align-content-center mt-2 me-2 ms-1">
             <div class="row">
                 <span class="form-control" readonly>
                     @Model.Comment.Content
                 </span>
             </div>
-            <div class="row d-flex align-content-end">
+            <div class="row d-flex align-content-end mt-2">
                 <h6>Dodano: @Model.Comment.DateCreated</h6>
             </div>
         </div>
@@ -26,7 +26,11 @@
              User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Comment.AuthorId)
         {
             <div class="col-sm-1 mt-1 offset-1">
-                <a class="btn btn-danger float-end"> Usuń komentarz </a>
+                <a class="btn btn-outline-danger float-end"> Usuń komentarz </a>
+                @if(User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Comment.AuthorId)
+                {
+                <a class="btn btn-outline-warning float-end mt-2"> Edytuj komentarz </a>
+                }
             </div>
         }
     </div>

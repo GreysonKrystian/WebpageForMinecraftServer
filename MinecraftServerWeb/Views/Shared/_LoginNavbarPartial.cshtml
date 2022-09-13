@@ -7,21 +7,21 @@
 {
     User loggedUser = (User)UserManager.GetUserAsync(User).GetAwaiter().GetResult();
     <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Zalogowano jako: @loggedUser.ForumNickname</a>
+        <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Zalogowano jako: @loggedUser.ForumNickname </a>
     </li>
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Wyloguj się</button>
+            <button id="logout" type="submit" class="btn btn-outline-warning ms-2">Wyloguj się</button>
         </form>
     </li>
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Zarejestruj się</a>
+        <a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register">Zarejestruj się</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark" id="login" asp-controller="Login" asp-action="Login">Zaloguj się</a>
+        <a class="nav-link" id="login" asp-controller="Login" asp-action="Login">Zaloguj się</a>
     </li>
 }
 </ul>

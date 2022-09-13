@@ -7,45 +7,52 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>@ViewData["Title"] - MinecraftServerWeb</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <title>@ViewData["Title"] - MinecraftWeb</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/MinecraftServerWeb.styles.css" asp-append-version="true"/>
     <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@sweetalert2/theme-dark@5/dark.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" 
+         style="background-color: #6F42C1">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MinecraftServerWeb</a>
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MinecraftWeb</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="nav nav-pills">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Strona Główna</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Rules">Zasady</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Forum">Forum</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Map">Mapa Serwera</a>
-                    </li>
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Forum">Forum</a> *@
+                    @* </li> *@
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Map">Mapa Serwera</a> *@
+                    @* </li> *@
                 </ul>
-                <ul class="nav nav-pills">
+                <ul class="navbar-nav">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <li class="nav-item ms-auto ms-1">
-                        <a class="nav-link" asp-area="" asp-controller="UserPanel" asp-action="Index">Panel Użytkownika</a>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Panel Użytkownika</a>
                     </li>
                     @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
                     {
-                        <a asp-controller="Admin" asp-action="ManageUsers" class="btn btn-danger m-1"> Panel Administratora</a>
+                        <li>
+                            
+                        </li>
+                        <a asp-controller="Admin" asp-action="ManageUsers" class="nav-link"> Panel Administratora</a>
                     }
                 }
                     <partial name="_LoginNavbarPartial"/>
@@ -62,9 +69,9 @@
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2022 - MinecraftServerWeb - <a asp-area="" asp-controller="Home" asp-action="Rules">Rules</a>
+<footer class="border-top footer mt-auto text-muted mb-4">
+    <div class="container text-warning">
+        &copy; 2022 - MinecraftWeb by Krystian Grela
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -72,10 +79,13 @@
 
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="//cdn.datatables.net/plug-ins/1.12.1/dataRender/datetime.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

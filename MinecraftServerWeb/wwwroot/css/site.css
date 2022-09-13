@@ -16,3 +16,19 @@ html {
 body {
     margin-bottom: 60px;
 }
+
+.dataTables_filter input
+{
+  color: white;
+}
+
+.dataTables_wrapper .dataTables_length select
+{
+  color: #FFAA00;
+}
+
+table.dataTable.row-border tbody td,table.dataTable.row-border thead td{
+  border-top: 1px solid white !important;
+  border-bottom: 1px solid white !important;
+}
+
