@@ -50,6 +50,10 @@ namespace MinecraftServerWeb.Data
                 .HasMany(e => e.Comments)
                 .WithOne(e => e.Author)
                 .OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder.Entity<User>()
+                .Property(e => e.IsMuted)
+                .HasDefaultValue(false);
+
 
             modelBuilder.Entity<Post>()
                 .Property(e => e.DateCreated)
