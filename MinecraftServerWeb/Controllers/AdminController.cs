@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using MinecraftServerWeb.Models;
 using MinecraftServerWeb.Repository.Interfaces;
 using MinecraftServerWeb.Utility;
+using MinecraftServerWeb.Utility.Blockade;
+using MinecraftServerWeb.ViewModels;
 
 namespace MinecraftServerWeb.Controllers
 {
@@ -11,9 +14,11 @@ namespace MinecraftServerWeb.Controllers
     public class AdminController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public AdminController(IUnitOfWork unitOfWork)
+        private readonly UserManager<IdentityUser> _userManager;
+        public AdminController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
                 _unitOfWork = unitOfWork;
+                _userManager = userManager;
         }
         public IActionResult ManageUsers()
         {
@@ -36,10 +41,12 @@ namespace MinecraftServerWeb.Controllers
             var user = _unitOfWork.User.GetFirstOrDefault(e => e.Id == accountId);
             if (user == null)
                 return BadRequest();
-            return View(user);
+            BlockAccountViewModel blockAccountViewModel= new();
+            blockAccountViewModel.User = user;
+            return View(blockAccountViewModel);
         }
 
-    [Route("Admin/AccountInfo/{accountId}")]
+        [Route("Admin/AccountInfo/{accountId}")]
         public IActionResult AccountInfo(string accountId)
         {
             var user = _unitOfWork.User.GetFirstOrDefault(e => e.Id == accountId);
@@ -57,9 +64,29 @@ namespace MinecraftServerWeb.Controllers
 
           [HttpPost]
           [ValidateAntiForgeryToken]
-          public IActionResult BlockAccountManager(User user)
+          [Route("/Admin/BlockAccountManager/{accountId}")]
+          public IActionResult BlockAccountManager(BlockAccountViewModel blockAccountViewModel)
           {
-              throw new NotImplementedException();
+              if (string.IsNullOrEmpty(blockAccountViewModel.BlockEndDate) ||
+                  string.IsNullOrEmpty(blockAccountViewModel.BlockEndTime))
+              {
+                  return BadRequest("Wrong Date");
+              }
+              DateTime BanEndDate = DateTime.Parse(blockAccountViewModel.BlockEndDate);
+              TimeSpan BanEndTime = TimeSpan.Parse(blockAccountViewModel.BlockEndTime);
+              BanEndDate = BanEndDate.Add(BanEndTime);
+              if (BanEndDate < DateTime.Now)
+              {
+                  return BadRequest("Wrong Date");
+              }
+              LockUserHandler lockUserHandler = new(_userManager, _unitOfWork);
+              bool success = lockUserHandler.TimeLock(blockAccountViewModel.userId, BanEndDate);
+              if (!success)
+              {
+                  return BadRequest();
+              }
+              return RedirectToAction(nameof(Index), "Home");
+              
           }
 
         #region API CALLS

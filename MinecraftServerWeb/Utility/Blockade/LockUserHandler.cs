@@ -31,6 +31,17 @@ namespace MinecraftServerWeb.Utility.Blockade
 
         }
 
+        public bool TimeLock(User user, DateTime? endDate)
+        {
+            var lockUserResult = _userManager.SetLockoutEnabledAsync(user, true).GetAwaiter().GetResult();
+            if (endDate != null)
+            {
+                var setLockTimeResult = _userManager.SetLockoutEndDateAsync(user, endDate).GetAwaiter().GetResult();
+                return lockUserResult.Succeeded && setLockTimeResult.Succeeded;
+            }
+            return lockUserResult.Succeeded;
+        }
+
         public bool Unlock(string userId)
         {
             var user = _userManager.FindByIdAsync(userId).GetAwaiter().GetResult();
@@ -41,11 +52,24 @@ namespace MinecraftServerWeb.Utility.Blockade
             return unlockUserResult.Succeeded && removeTimeLockResult.Succeeded;
         }
 
+        public bool Unlock(User user)
+        {
+            var unlockUserResult = _userManager.SetLockoutEnabledAsync(user, false).GetAwaiter().GetResult();
+            var removeTimeLockResult = _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue).GetAwaiter().GetResult();
+            return unlockUserResult.Succeeded && removeTimeLockResult.Succeeded;
+        }
+
         public void PermanentDeleteUser(string userId)
         {
             User user = (User)_userManager.FindByIdAsync(userId).GetAwaiter().GetResult();
             if (user == null)
                 throw new UserNotFoundException("User with this ID not found in database");
+            _unitOfWork.User.Remove(user);
+            _unitOfWork.Commit();
+        }
+
+        public void PermanentDeleteUser(User user)
+        {
             _unitOfWork.User.Remove(user);
             _unitOfWork.Commit();
         }

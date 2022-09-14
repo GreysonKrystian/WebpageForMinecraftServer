@@ -37,12 +37,12 @@
                 {
                     var post = Model.Announcements.ElementAt(postIndex);
                     User? author = Model.Users.FirstOrDefault(e => e.Id == post.AuthorId);
-                    <div class="card border-secondary mt-4" style="background-color: #220e40!important;">
+                    <div class="card border-secondary mt-lg-4" style="background-color: #220e40!important;">
                         <div class="row">
-                            <div class="col-sm-2 text-center pe-2 mt-3 ms-4">
-                                <div class="card border-start py-2 me-1">
-                                    <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="img-fluid rounded mx-auto d-block mb-2"
-                                         style="padding-top: 5px; width: auto; height: 100px" alt="image of user"/>
+                            <div class="col-lg-2 text-center pe-lg-2 mt-lg-3 ms-lg-4">
+                                <div class="card me-lg-1">
+                                    <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="rounded mx-auto d-block mb-2" width="120" height="120"
+                                         style="" alt="image of user"/>
                                     <div class="mt-2 badge bg-primary text-wrap"> @author.ForumNickname </div>
                                     <div class="mt-2 badge bg-danger text-wrap"> @author.Rank </div>
                                     <div class="mt-2 badge bg-secondary text-wrap">
@@ -50,13 +50,13 @@
                                         <p>@post.DateCreated.ToString("HH:mm dd/MM/yyyy") </p></div>
                                 </div>
                             </div>
-                            <div class="col-lg-9 ms-2" id="AnnouncementContent">
-                                <h4 class="display-6 mt-2 text-center">
+                            <div class="col-lg-9 ms-lg-2" id="AnnouncementContent">
+                                <h4 class="display-6 mt-lg-2 text-center">
                                     @post.Title
                                 </h4>
                                 @if (post.Description != null)
                                 {
-                                    <p class="form-control mt-3 text-white">
+                                    <p class="form-control mt-lg-3 text-white">
                                         @post.Description
                                     </p>
                                 }
@@ -116,7 +116,7 @@
                                 {
                                     <!-- create comment for announcement -->
                                     <div class="d-flex flex-row mt-3 mb-4">
-                                        <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="img-fluid shadow-lg mx-auto d-block mb-1 me-1 mt-1"
+                                        <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="shadow-lg mx-auto d-block mb-1 me-1 mt-1"
                                              style="padding: 5px; width: 70px; height: 70px" alt="image of user"/>
                                         @Html.AntiForgeryToken()
                                         <textarea style="resize: none;" type="text" class="form-control me-3" placeholder="Dodaj komentarz" id="CommentForm_@post.PostId"></textarea>

@@ -6,13 +6,29 @@
             {
                 targets: 4,
                 render: $.fn.dataTable.render.moment('YYYY-MM-DDTHH:mm:ss.SSSSSSS', 'hh:mm:ss DD/MM/YY')
-            }],
+            },
+            {
+                targets: 6,
+                render: $.fn.dataTable.render.moment('YYYY-MM-DDTHH:mm:ssZZ', 'hh:mm:ss DD/MM/YY')
+            }
+
+        ],
         "columns": [
             { "data": "forumNickname", "width": "15%" },
             { "data": "serverNickname", "width": "15%" },
-            { "data": "email", "width": "20%" },
-            { "data": "rank", "width": "10%" },
+            { "data": "email", "width": "15%" },
+            { "data": "rank", "width": "8%" },
             { "data": "dateCreated", "width": "15%" },
+            { "data": "emailConfirmed", "width": "2%", "render": function(data){
+                if (data === true) {
+                    return "TAK";
+                } else {
+                    return "NIE";
+                }
+
+            }
+            },
+            { "data": "lockoutEnd", "width": "15%"},
             {
                 "data": "id", "width": "10%", "render": function (data, type, row, meta) {
                     if (window.CurrentUserId !== data) {
@@ -63,7 +79,7 @@ function ManageUser(id, name) {
         showCloseButton: true,
         showConfirmButton: false,
         html: ` 
-            <a id="InfoButton" class="btn btn-outline-info me-3" href="/Admin/AccountInfo/${id}"> Informacje </a>
+             <a id="InfoButton" class="btn btn-outline-info me-3" href="/Admin/AccountInfo/${id}"> Informacje </a>
             <a id="MuteButton" class="btn btn-outline-warning me-3" href="/Admin/MuteAccountManager/${id}"> Wyciszenie </a>
             <a id="BanButton" class="btn btn-outline-danger" href="/Admin/BlockAccountManager/${id}"> Blokada </a>
         `,
