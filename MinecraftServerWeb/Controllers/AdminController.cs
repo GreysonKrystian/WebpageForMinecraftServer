@@ -67,10 +67,15 @@ namespace MinecraftServerWeb.Controllers
           [Route("/Admin/BlockAccountManager/{accountId}")]
           public IActionResult BlockAccountManager(BlockAccountViewModel blockAccountViewModel)
           {
-              if (string.IsNullOrEmpty(blockAccountViewModel.BlockEndDate) ||
-                  string.IsNullOrEmpty(blockAccountViewModel.BlockEndTime))
+              if (string.IsNullOrEmpty(blockAccountViewModel.BlockEndDate))
               {
-                  return BadRequest("Wrong Date");
+                  return BadRequest("Wrong date format");
+              }
+              if(string.IsNullOrEmpty(blockAccountViewModel.BlockEndDate) ||
+                 !TimeSpan.TryParse(blockAccountViewModel.BlockEndTime, out _) ||
+                  TimeSpan.FromHours(24) < TimeSpan.Parse(blockAccountViewModel.BlockEndTime))
+              {
+                  return BadRequest("Wrong hour format");
               }
               DateTime BanEndDate = DateTime.Parse(blockAccountViewModel.BlockEndDate);
               TimeSpan BanEndTime = TimeSpan.Parse(blockAccountViewModel.BlockEndTime);
@@ -80,7 +85,7 @@ namespace MinecraftServerWeb.Controllers
                   return BadRequest("Wrong Date");
               }
               LockUserHandler lockUserHandler = new(_userManager, _unitOfWork);
-              bool success = lockUserHandler.TimeLock(blockAccountViewModel.userId, BanEndDate);
+              bool success = lockUserHandler.TimeLock(blockAccountViewModel.userId, BanEndDate, blockAccountViewModel.BanReason);
               if (!success)
               {
                   return BadRequest();

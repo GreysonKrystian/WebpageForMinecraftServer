@@ -56,10 +56,11 @@ namespace MinecraftServerWeb.Controllers
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = loginModel.ReturnUrl, RememberMe = loginModel.Input.RememberMe });
                 }
+
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
+                    return Redirect("/Identity/Account/Lockout?Email=" + loginModel.Input.Email);
                 }
                 else
                 {

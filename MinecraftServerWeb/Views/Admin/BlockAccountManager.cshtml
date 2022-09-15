@@ -38,6 +38,12 @@
                 <div class="input-group timepicker">
                     <input type="text" class="form-control" id="TimePicker" asp-for="BlockEndTime"/>
                 </div>
+                <div class="row mt-3">
+                    <label for="BanReason" class="form-label mt-2"> Powód blokady: </label>
+                </div>
+                <div class="input-group">
+                    <textarea type="text" class="form-control" id="BanReason" rows="3" style="overflow:auto;resize:none" asp-for="BanReason"></textarea>
+                </div>
                 <div class="form-group mt-5">
                     <input type="submit" value="Potwierdź" class="btn btn-outline-danger float-end"/>
                 </div>

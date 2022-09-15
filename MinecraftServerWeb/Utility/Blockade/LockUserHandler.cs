@@ -16,29 +16,33 @@ namespace MinecraftServerWeb.Utility.Blockade
                 _unitOfWork = unitOfWork;
         }
 
-        public bool TimeLock(string userId, DateTime? endDate)
+        public bool TimeLock(string userId, DateTime? endDate, string? reason)
         {
-            var user = _userManager.FindByIdAsync(userId).GetAwaiter().GetResult();
+            var user = (User)_userManager.FindByIdAsync(userId).GetAwaiter().GetResult();
             if (user == null)
                 throw new UserNotFoundException("User with this ID not found in database");
             var lockUserResult = _userManager.SetLockoutEnabledAsync(user, true).GetAwaiter().GetResult();
+            user.LockReason = reason;
             if (endDate != null)
             {
                 var setLockTimeResult = _userManager.SetLockoutEndDateAsync(user, endDate).GetAwaiter().GetResult();
                 return lockUserResult.Succeeded && setLockTimeResult.Succeeded;
             }
+            _unitOfWork.Commit();
             return lockUserResult.Succeeded;
 
         }
 
-        public bool TimeLock(User user, DateTime? endDate)
+        public bool TimeLock(User user, DateTime? endDate, string? reason)
         {
             var lockUserResult = _userManager.SetLockoutEnabledAsync(user, true).GetAwaiter().GetResult();
+            user.LockReason = reason;
             if (endDate != null)
             {
                 var setLockTimeResult = _userManager.SetLockoutEndDateAsync(user, endDate).GetAwaiter().GetResult();
                 return lockUserResult.Succeeded && setLockTimeResult.Succeeded;
             }
+            _unitOfWork.Commit();
             return lockUserResult.Succeeded;
         }
 

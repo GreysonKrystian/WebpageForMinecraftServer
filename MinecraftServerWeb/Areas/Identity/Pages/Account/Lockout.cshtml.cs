@@ -3,23 +3,42 @@
 #nullable disable
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MinecraftServerWeb.Models;
 
 namespace MinecraftServerWeb.Areas.Identity.Pages.Account
 {
-    /// <summary>
-    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
-    /// </summary>
     [AllowAnonymous]
     public class LockoutModel : PageModel
     {
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        public void OnGet()
+
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public new User User { get; set; }
+        public LockoutModel(UserManager<IdentityUser> userManager)
         {
+            _userManager = userManager;
+        }
+
+        public async Task<IActionResult> OnGetAsync(string? email)
+        {
+            if (email == null)
+            {
+                return BadRequest();
+            }
+            User = (User)await _userManager.FindByEmailAsync(email);
+            if (User == null)
+            {
+                throw new InvalidOperationException($"Unable to load user.");
+            }
+
+            if (!_userManager.IsLockedOutAsync(User).GetAwaiter().GetResult())
+            {
+                return BadRequest("This user is not locked");
+            }
+            return Page();
         }
     }
 }

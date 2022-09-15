@@ -1,10 +1,13 @@
 ﻿@page
 @model LockoutModel
 @{
-    ViewData["Title"] = "Locked out";
+    ViewData["Title"] = "Użytkownik zablokowany";
 }
 
 <header>
     <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
+    <h3 class="text-danger">Konto o nazwie @Model.User.ForumNickname zostało czasowo zablokowane.</h3>
+    <h4 class="text-danger">Odblokowanie konta nastąpi: @Model.User.LockoutEnd.Value.ToString("dd/MM/yyyy HH:mm:ss") </h4>
+    <br/>
+    <h5 class="text-white"> Powód blokady: @Model.User.LockReason </h5>
 </header>
