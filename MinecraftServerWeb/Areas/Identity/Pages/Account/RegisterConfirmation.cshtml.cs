@@ -59,8 +59,12 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account
             }
 
             Email = email;
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
+            // This will work only when in debug mode or email provider credentials not set
+            #if DEBUG
             DisplayConfirmAccountLink = true;
+            #else
+            DisplayConfirmAccountLink = false;
+            #endif
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);

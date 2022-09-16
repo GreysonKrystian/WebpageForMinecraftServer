@@ -1,13 +1,14 @@
 ﻿@model LoginModel
 
 
-<h1>Zaloguj się na stronie</h1>
 <div class="row">
-    <div class="col-md-4">
-        <hr />
+    <div class="col-md-6 offset-3 mt-5">
+        <h1>Zaloguj się na stronie</h1>
+        <hr/>
         <partial name="_LoginPanel" for="@Model"/>
     </div>
-    <div class="col-md-6 col-md-offset-2">
+    @*External authentication is not a priority right now*@
+    @*<div class="col-md-6 col-md-offset-2">
         <section>
             <h3>Use another service to log in.</h3>
             <hr />
@@ -36,7 +37,7 @@
                 }
             }
         </section>
-    </div>
+    </div>*@
 </div>
 
 @section Scripts {
