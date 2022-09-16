@@ -94,6 +94,17 @@ namespace MinecraftServerWeb.Controllers
               
           }
 
+          [HttpPost]
+          [ValidateAntiForgeryToken]
+          [Route("/Admin/UnblockAccount/{userId}")]
+          public IActionResult UnblockAccount(string userId)
+          {
+              if (userId == null) throw new ArgumentNullException(nameof(userId));
+              LockUserHandler lockUserHandler = new(_userManager, _unitOfWork);
+              lockUserHandler.Unlock(userId);
+              return new AcceptedResult();
+          }
+
         #region API CALLS
 
         // GET: Admin/GetAllUsers/

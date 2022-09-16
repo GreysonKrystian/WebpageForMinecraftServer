@@ -25,7 +25,6 @@
                 } else {
                     return "NIE";
                 }
-
             }
             },
             { "data": "lockoutEnd", "width": "15%"},

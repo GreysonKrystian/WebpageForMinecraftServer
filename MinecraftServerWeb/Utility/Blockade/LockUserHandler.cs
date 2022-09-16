@@ -51,15 +51,17 @@ namespace MinecraftServerWeb.Utility.Blockade
             var user = _userManager.FindByIdAsync(userId).GetAwaiter().GetResult();
             if (user == null)
                 throw new UserNotFoundException("User with this ID not found in database");
+            var removeTimeLockResult = _userManager.SetLockoutEndDateAsync(user, null).GetAwaiter().GetResult();
             var unlockUserResult = _userManager.SetLockoutEnabledAsync(user, false).GetAwaiter().GetResult();
-            var removeTimeLockResult = _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue).GetAwaiter().GetResult();
+            _unitOfWork.Commit();
             return unlockUserResult.Succeeded && removeTimeLockResult.Succeeded;
         }
 
         public bool Unlock(User user)
         {
+            var removeTimeLockResult = _userManager.SetLockoutEndDateAsync(user, null).GetAwaiter().GetResult();
             var unlockUserResult = _userManager.SetLockoutEnabledAsync(user, false).GetAwaiter().GetResult();
-            var removeTimeLockResult = _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue).GetAwaiter().GetResult();
+            _unitOfWork.Commit();
             return unlockUserResult.Succeeded && removeTimeLockResult.Succeeded;
         }
 

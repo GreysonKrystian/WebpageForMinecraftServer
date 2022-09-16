@@ -1,4 +1,5 @@
 ﻿@model User
+@inject UserManager<IdentityUser> UserManager
 
 <div class="row">
     <div class="col-md-4 mb-3">
@@ -12,6 +13,10 @@
                         <p class="text-secondary mb-1">Ranga: @Model.Rank</p>
                         <p class="text-muted"><small>Dołączył: @Model.DateCreated </small></p>
                     </div>
+                    @if (UserManager.IsLockedOutAsync(Model).GetAwaiter().GetResult())
+                    {
+                        <button class="btn btn-outline-warning">Odblokuj użytkownika</button>
+                    }
                 </div>
             </div>
         </div>
