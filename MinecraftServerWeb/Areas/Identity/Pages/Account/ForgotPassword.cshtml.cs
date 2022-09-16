@@ -73,7 +73,7 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    $"Aby zresetować hasło dla tego adresu Email <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknij w ten link</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

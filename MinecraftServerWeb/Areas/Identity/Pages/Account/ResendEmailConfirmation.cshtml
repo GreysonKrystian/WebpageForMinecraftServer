@@ -1,7 +1,7 @@
 ﻿@page
 @model ResendEmailConfirmationModel
 @{
-    ViewData["Title"] = "Resend email confirmation";
+    ViewData["Title"] = "Wyślij potwierdzenie adresu email ponownie";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -16,7 +16,7 @@
                 <label asp-for="Input.Email" class="form-label"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Wyślij potwierdzenie ponownie</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Wyślij potwierdzenie ponownie</button>
         </form>
     </div>
 </div>
