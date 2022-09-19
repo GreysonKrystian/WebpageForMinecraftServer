@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @inject SignInManager<IdentityUser> SignInManager
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,8 +20,8 @@
 
 </head>
 <body class="d-flex flex-column min-vh-100">
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" 
+<header class="mb-5">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3 fixed-top d-flex align-items-center"
          style="background-color: #6F42C1">
         <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MinecraftWeb</a>
@@ -44,19 +45,19 @@
                     @* </li> *@
                 </ul>
                 <ul class="navbar-nav">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Panel Użytkownika</a>
-                    </li>
-                    @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
+                    @if (SignInManager.IsSignedIn(User))
                     {
-                        <li>
-                            
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Panel Użytkownika</a>
                         </li>
-                        <a asp-controller="Admin" asp-action="ManageUsers" class="nav-link"> Panel Administratora</a>
+                        @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
+                        {
+                            <li>
+                            
+                            </li>
+                            <a asp-controller="Admin" asp-action="ManageUsers" class="nav-link"> Panel Administratora</a>
+                        }
                     }
-                }
                     <partial name="_LoginNavbarPartial"/>
                 </ul>
 
@@ -65,11 +66,10 @@
     </nav>
 
 </header>
-<div class="container">
-    <main role="main" class="pb-3">
+<main role="main" class="pb-3 container-fluid" style="padding-top: 70px;">
         @RenderBody()
-    </main>
-</div>
+</main>
+
 
 <footer class="border-top footer mt-auto text-muted mb-4">
     <div class="container text-warning">
