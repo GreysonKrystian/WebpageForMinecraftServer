@@ -24,4 +24,8 @@
     <PackageReference Include="MimeKit" Version="3.4.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\UserImages\" />
+  </ItemGroup>
+
 </Project>

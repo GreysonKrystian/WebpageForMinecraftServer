@@ -16,10 +16,7 @@ namespace MinecraftServerWeb.Models
         public string? MuteReason { get; set; }
         public bool IsMuted { get; set; }
         public DateTime? MuteEndDate { get; set; }
+        public string? ProfileDescription { get; set; }
 
-        public static explicit operator User(Task<IdentityUser> v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

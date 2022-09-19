@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MinecraftServerWeb.Models;
+using MinecraftServerWeb.Repository.Interfaces;
 
 namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
 {
@@ -17,15 +18,20 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IUnitOfWork _unitOfWork;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            IUnitOfWork unitOfWork)
+
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _unitOfWork = unitOfWork;
         }
 
+        public const double MaxImageSize = 2;
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -63,20 +69,24 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Numer Telefonu")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name= "Opis Profilu (maksymalnie 1000 znaków)")]
+            public string ProfileDescription { get; set; }
         }
 
         private async Task LoadAsync(User user)
         {
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            
+            var description = user.ProfileDescription;
             Email = email;
             ForumUsername = user.ForumNickname;
 
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                ProfileDescription = description
             };
         }
 
@@ -116,7 +126,10 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-
+            if (Input.ProfileDescription != user.ProfileDescription)
+            {
+                user.ProfileDescription = Input.ProfileDescription;
+            }
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Twój profil został zaaktualizowany";
             return RedirectToPage();

@@ -53,17 +53,18 @@ namespace MinecraftServerWeb.Data
             modelBuilder.Entity<User>()
                 .Property(e => e.IsMuted)
                 .HasDefaultValue(false);
-
+            modelBuilder.Entity<User>()
+                .Property(e => e.ProfileDescription)
+                .HasMaxLength(1000);
+                
 
             modelBuilder.Entity<Post>()
                 .Property(e => e.DateCreated)
                 .IsRequired()
                 .HasDefaultValueSql("getdate()");
             modelBuilder.Entity<Post>()
-                .Property(e => e.AuthorId)
-                .IsRequired()
-                .HasMaxLength(450)
-                .HasColumnType("nvarchar");
+                .Property(e => e.Content)
+                .IsRequired();
             modelBuilder.Entity<Post>()
                 .HasMany(e => e.Comments)
                 .WithOne(e => e.Post)

@@ -35,7 +35,7 @@
                         <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Strona Główna</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Rules">Zasady</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Rules">Regulamin</a>
                     </li>
                     @* <li class="nav-item"> *@
                     @*     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Forum">Forum</a> *@
@@ -66,12 +66,12 @@
     </nav>
 
 </header>
-<main role="main" class="pb-3 container-fluid" style="padding-top: 70px;">
+<main role="main" class="pb-3 container-fluid" style="padding-top: 70px; padding-bottom: 10px;">
         @RenderBody()
 </main>
 
 
-<footer class="border-top footer mt-auto text-muted mb-4">
+<footer class="border-top footer mt-auto text-muted mb-2">
     <div class="container text-warning">
         &copy; 2022 - MinecraftWeb by Krystian Grela
     </div>
