@@ -6,6 +6,45 @@
 }
 
 <partial name="_StatusMessage" for="StatusMessage" />
+<style>
+    .img-square-small {
+        height: 50px;
+        width: 50px;
+        background-color: #555;
+        opacity: 0.3;
+        margin: 0;
+    }
+    div#img-small {
+        width: 50%;
+        margin: 0 auto;
+    }
+    .img-square-medium {
+        height: 50px;
+        width: 50px;
+        background-color: #555;
+        opacity: 0.3;
+        margin: 10px;
+
+    }
+    .img-square-large {
+        height: 50px;
+        width: 50px;
+        background-color: #555;
+        opacity: 0.3;
+        margin: 10px;
+
+    }
+    figure.item {
+        vertical-align: top;
+        display: inline-block;
+        text-align: center;
+        width: 120px;
+    }
+
+    .caption {
+        display: block;
+    }
+</style>
 <div class="row">
     <div class="col-md-6 offset-3">
         <h2 class="text-center mb-5">@ViewData["Title"]</h2>
@@ -31,13 +70,23 @@
             
             <label class="form-label mt-3" for="imageFile">Zmiana zdjęcia profilowego (maksymalnie @IndexModel.MaxImageSize MB)</label>
             <div class="form-floating">
-            <input type="file" class="form-control" id="imageFile" accept="image/*" />
+                <button type="button" class="btn-primary" onclick="previewImage()">
+                    <i class="fa-solid fa-plus"></i>
+                    Dodaj Zdjęcie
+                </button>
+                <input type="file" id="getFile" style="display:none" accept="image/*"> 
             </div>
+            <label id="imageName" class="mt-3" style="visibility: hidden"> </label>
+            <label id="previewLabel" class="form-label mt-3" style="visibility: hidden"> Podgląd zdjęcia: </label>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary mt-3">Zapisz dane</button>
         </form>
     </div>
 </div>
 
+
+
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="/js/User/AddImage.js"></script>
 }
