@@ -2,6 +2,7 @@
 @using MinecraftServerWeb.Utility
 @model IndexViewModel
 @inject IWebHostEnvironment WebHostEnvironment
+@inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -114,10 +115,11 @@
                                 }
                                 @if (User.Identity.IsAuthenticated)
                         {
-                                    <!-- create comment for announcement -->
+                            <!-- create comment for announcement -->
+                            var currentUserEmail = User.FindFirstValue(ClaimTypes.Email);
                                     <div class="d-flex flex-row mt-3 mb-4">
-                                        <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="shadow-lg mx-auto d-block mb-1 me-1 mt-1"
-                                             style="padding: 5px; width: 70px; height: 70px" alt="image of user"/>
+                                        <img src="@UserImagesManager.GetUserImagePath(currentUserEmail, WebHostEnvironment, "100")" asp-append-version="true" class="shadow-lg mx-auto d-block mb-1 me-3 mt-1 img-fluid rounded-circle"
+                                             style="padding: 5px;" alt="image of user"/>
                                         @Html.AntiForgeryToken()
                                         <textarea style="resize: none;" type="text" class="form-control me-3" placeholder="Dodaj komentarz" id="CommentForm_@post.PostId"></textarea>
                                         <button class="btn btn-primary" type="button" onclick="addComment(@post.PostId)"> Dodaj komentarz </button>
@@ -159,9 +161,6 @@
                         </a>
                         <a href="#" class="list-group-item list-group-item-action">
                             Wiadomości
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action">
-                            Porta ac consectetur ac
                         </a>
                     </div>
                 </div>
@@ -226,5 +225,5 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="js/Home/Delete.js"></script>
-    <script src="js/Home/Comments.js"></script>
+    <script src="js/User/Comments.js"></script>
 }

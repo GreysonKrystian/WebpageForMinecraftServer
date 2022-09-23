@@ -54,30 +54,8 @@ namespace MinecraftServerWeb.Controllers
                 return View();
             }
         }
-        // POST: Announcement/AddComment/
-        [AllowAnonymous]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddComment(int announcementId, string content)
-        {
-            if (content == null)
-            {
-                return BadRequest();
-            }
-            if (null == User.FindFirstValue(ClaimTypes.NameIdentifier))
-            {
-                return Unauthorized();
-            }
-            Comment comment = new()
-            {
-                AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                Content = content,
-                PostId = announcementId
-            };
-            _unitOfWork.Comment.Add(comment);
-            _unitOfWork.Commit();
-            return new AcceptedResult();
-        }
+
+
         // GET: Announcement/Edit/5
         [Route("Announcement/Edit/{announcementId}")]
         public ActionResult Edit(int announcementId)

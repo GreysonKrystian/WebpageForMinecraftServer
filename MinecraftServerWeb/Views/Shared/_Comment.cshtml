@@ -1,37 +1,46 @@
 ﻿@using MinecraftServerWeb.Utility
 @using System.Security.Claims   
 @model CommentViewModel
-
+@inject IWebHostEnvironment WebHostEnvironment
 @{
     <div class="row mt-2 mb-1">
-        <div class="row mb-1">
-            <div class="col-md-8 d-flex align-items-center mb-1">
-                <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="img-thumbnail"
-                style="padding-top: 5px; width: 100px; height: 100px" alt="image of user"/>
-                <h6 class="text-wrap mt-2 ms-2 me-2"> @Model.CommentAuthor.ForumNickname </h6>
-                <div class="badge rounded-pill bg-danger col-sm-3"> @Model.CommentAuthor.Rank </div>
-            </div>
-        </div>
-        <div class="col-sm-9 align-content-center mt-2 me-2 ms-1">
-            <div class="row">
-                <span class="form-control" readonly>
-                    @Model.Comment.Content
-                </span>
-            </div>
-            <div class="row d-flex align-content-end mt-2">
-                <h6>Dodano: @Model.Comment.DateCreated</h6>
-            </div>
-        </div>
-        @if (User.IsInRole(SD.RoleMod) || User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleOwner) ||
+                <div class="row mb-1">
+                    <div class="col-md-8 d-flex align-items-center mb-1">
+                        <img src="@UserImagesManager.GetUserImagePath(Model.CommentAuthor.Email, WebHostEnvironment, "100")" asp-append-version="true" class="img-fluid rounded-circle"
+                style="padding-top: 5px;" alt="image of user"/>
+                        <h6 class="text-wrap mt-2 ms-2 me-2"> @Model.CommentAuthor.ForumNickname </h6>
+                        <div class="badge rounded-pill bg-danger col-sm-3"> @Model.CommentAuthor.Rank </div>
+                    </div>
+                </div>
+                <div class="col-sm-9 align-content-center mt-2 me-2 ms-1">
+                    <div class="row">
+                        <span class="form-control" readonly>
+                            @Model.Comment.Content
+                        </span>
+                    </div>
+                    <div class="row d-flex align-content-end mt-2">
+                        <h6>Dodano: @Model.Comment.DateCreated</h6>
+                    </div>
+                </div>
+                @if (User.IsInRole(SD.RoleMod) || User.IsInRole(SD.RoleAdmin) || User.IsInRole(SD.RoleOwner) ||
              User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Comment.AuthorId)
-        {
-            <div class="col-sm-1 mt-1 offset-1">
-                <a class="btn btn-outline-danger float-end"> Usuń komentarz </a>
+            {
+                    <div class="col-sm-1 mt-1 offset-1">
+                        @{ string url = "/Comments/DeleteComment/" + Model.Comment.PostId + "/" + Model.Comment.CommentId;
+                        <button class="btn btn-outline-danger float-end" onclick="DeleteComment('@url')"> Usuń komentarz </button>
+                        }@* TODO after adding edit history 
+                        
                 @if(User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Comment.AuthorId)
                 {
                 <a class="btn btn-outline-warning float-end mt-2"> Edytuj komentarz </a>
-                }
-            </div>
-        }
+                }*@
+                    </div>
+            }
     </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="js/User/Comments.js"></script>
+
 }
