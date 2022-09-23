@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Discord;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -110,7 +111,7 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(IFormFile getFile)
         {
             var user = (User)await _userManager.GetUserAsync(User);
             if (user == null)
@@ -124,6 +125,7 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            Input.AddedPhoto = getFile;
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -140,10 +142,14 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
             }
             if ( Input.AddedPhoto != null)
             {
-                var img = UserImagesManager.ConvertIFormFileToImage(Input.AddedPhoto);
-                var btm = UserImagesManager.ResizeImage(new Size(600, 600), img);
-                string path = UserImagesManager.GetUserImagePath(user);
-                UserImagesManager.SaveBitmapToFile(btm, path);
+                int[] sizes = {600, 300, 100} ;
+                foreach(int size in sizes)
+                {
+                    var btm = UserImagesManager.ResizeImage(new Size(size, size), UserImagesManager.ConvertIFormFileToImage(Input.AddedPhoto));
+                    var path = UserImagesManager.GetUserImageSavePath(user.Email, _webHostEnvironment,
+                        size.ToString());
+                    UserImagesManager.SaveBitmapToFile(btm, path);
+                }
             }
             _unitOfWork.Commit();
             await _signInManager.RefreshSignInAsync(user);

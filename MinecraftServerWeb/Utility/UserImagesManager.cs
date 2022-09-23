@@ -52,16 +52,31 @@ namespace MinecraftServerWeb.Utility
             img.Save(path, ImageFormat.Png);
         }
 
-        public static string GetUserImagePath(User user)
+
+        public static string GetUserImageSavePath(string email, IWebHostEnvironment webHostEnvironment, string size)
         {
-            string path = Path.Combine(Directory.GetCurrentDirectory() + Paths.UserImagesPath, user.Email + ".png");
+            if (size != "100" && size != "300" && size != "600")
+            {
+                throw new InvalidOperationException("Wrong photo size. Available sizes are 100, 300 and 600");
+            }
+            return Path.Combine(webHostEnvironment.WebRootPath + Paths.UserImagesPath, email + "." + size + ".png");
+        }
+
+
+        public static string GetUserImagePath(string email, IWebHostEnvironment webHostEnvironment, string size)
+        {
+            if (size != "100" && size != "300" && size != "600")
+            {
+                throw new InvalidOperationException("Wrong photo size. Available sizes are 100, 300 and 600");
+            }
+            string path = Path.Combine(webHostEnvironment.WebRootPath + Paths.UserImagesPath, email + "." + size + ".png");
             if (File.Exists(path))
             {
-                return path;
+                return Path.Combine("~" + Paths.UserImagesPath, email + "." + size + ".png");
             }
             else
             {
-                return Path.Combine(Directory.GetCurrentDirectory(), "default.png");
+                return Path.Combine("~" + Paths.UserImagesPath, "default." + size + ".png");
             }
         }
 

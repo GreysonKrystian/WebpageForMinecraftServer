@@ -1,10 +1,10 @@
 ﻿@using System.Security.Claims
 @using MinecraftServerWeb.Utility
 @model IndexViewModel
+@inject IWebHostEnvironment WebHostEnvironment
 @{
     ViewData["Title"] = "Home Page";
 }
-
 <div id="content-wrapper" class="container-xxl">
     <!-- Server Banner -->
 <div class="text-center">
@@ -37,70 +37,70 @@
         {
             var post = Model.Announcements.ElementAt(postIndex);
             User? author = Model.Users.FirstOrDefault(e => e.Id == post.AuthorId);
-            <div class="card border-secondary mt-lg-4" style="background-color: #220e40 !important;">
-                <div class="row">
-                    <div class="col-lg-2 text-center pe-lg-2 mt-lg-3 ms-lg-4">
-                        <div class="card me-lg-1">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Square_200x200.png" class="rounded mx-auto d-block mb-2 img-fluid"
-                                 style="" alt="image of user"/>
-                            <div class="mt-2 badge bg-primary text-wrap"> @author.ForumNickname </div>
-                            <div class="mt-2 badge bg-danger text-wrap"> @author.Rank </div>
-                            <div class="mt-2 badge bg-secondary text-wrap">
-                                <p>Dodano:</p>
-                                <p>@post.DateCreated.ToString("HH:mm dd/MM/yyyy") </p></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-9 ms-lg-2" id="AnnouncementContent">
-                        <h4 class="display-6 mt-lg-2 text-center">
-                            @post.Title
-                        </h4>
-                        @if (post.Description != null)
+                    <div class="card border-secondary mt-lg-4" style="background-color: #220e40 !important;">
+                        <div class="row">
+                            <div class="col-lg-2 text-center pe-lg-2 mt-lg-3 ms-lg-4">
+                                <div class="card me-lg-1">
+                                    <img src="@UserImagesManager.GetUserImagePath(author.Email, WebHostEnvironment, "300")" asp-append-version="true" class="rounded mx-auto d-block mb-2 img-fluid"
+                                         style="" alt="image of user"/>
+                                    <div class="mt-2 badge bg-primary text-wrap"> @author.ForumNickname </div>
+                                    <div class="mt-2 badge bg-danger text-wrap"> @author.Rank </div>
+                                    <div class="mt-2 badge bg-secondary text-wrap">
+                                        <p>Dodano:</p>
+                                        <p>@post.DateCreated.ToString("HH:mm dd/MM/yyyy") </p></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 ms-lg-2" id="AnnouncementContent">
+                                <h4 class="display-6 mt-lg-2 text-center">
+                                    @post.Title
+                                </h4>
+                                @if (post.Description != null)
                         {
-                            <p class="form-control mt-lg-3 text-white">
-                                @post.Description
-                            </p>
+                                    <p class="form-control mt-lg-3 text-white">
+                                        @post.Description
+                                    </p>
                         }
-                        <!-- content of Announcements -->
-                        @{
+                                <!-- content of Announcements -->
+                                @{
                             const int maximumShownWords = 90;
 
                             if (post.Content.Split(" ").Length > maximumShownWords)
                             {
 
-                                <p class="form-control" readonly>
-                                    @String.Join(" ", post.Content.Split(" ").Take(maximumShownWords))....
-                                    <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="link-warning fw-bold ">czytaj całość</a>
-                                </p>
+                                                <p class="form-control" readonly>
+                                                    @String.Join(" ", post.Content.Split(" ").Take(maximumShownWords))....
+                                                    <a asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="link-warning fw-bold ">czytaj całość</a>
+                                                </p>
                             }
                             else
                             {
-                                <p class="form-control" readonly>
-                                    @post.Content
-                                </p>
+                                                <p class="form-control" readonly>
+                                                    @post.Content
+                                                </p>
                             }
-                        }
+                                }
 
-                        <!-- Buttons for each announcement-->
-                        <div class="row align-items-end">
-                            <div class="col-md-6 mb-2">
-                                <a class="btn btn-outline-danger me-2" data-bs-toggle="collapse" href="#Current_@post.PostId" role="button" aria-expanded="false" aria-controls="#Current_@post.PostId"> Komentarze (@Model.Comments.Count(e => e.PostId == post.PostId)) </a>
-                                <a class="btn btn-outline-warning" asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="link-primary fw-bold">Szczegóły</a>
-                            </div>
-                            @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == post.AuthorId)
+                                <!-- Buttons for each announcement-->
+                                <div class="row align-items-end">
+                                    <div class="col-md-6 mb-2">
+                                        <a class="btn btn-outline-danger me-2" data-bs-toggle="collapse" href="#Current_@post.PostId" role="button" aria-expanded="false" aria-controls="#Current_@post.PostId"> Komentarze (@Model.Comments.Count(e => e.PostId == post.PostId)) </a>
+                                        <a class="btn btn-outline-warning" asp-controller="Announcement" asp-action="Details" asp-route-announcementId="@post.PostId" class="link-primary fw-bold">Szczegóły</a>
+                                    </div>
+                                    @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == post.AuthorId)
                             {
-                                <div class="col-md-6">
-                                    @Html.AntiForgeryToken()
-                                    <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-outline-warning float-end ms-3 "> Edytuj </a>
-                                    <a class="btn btn-outline-danger ms-3 float-end" onclick="DeletePost('@post.Title', '/Announcement/Delete/@post.PostId')"> Usuń </a>
-                                </div>
+                                        <div class="col-md-6">
+                                            @Html.AntiForgeryToken()
+                                            <a asp-controller="Announcement" asp-action="Edit" asp-route-announcementId="@post.PostId" class="btn btn-outline-warning float-end ms-3 "> Edytuj </a>
+                                            <a class="btn btn-outline-danger ms-3 float-end" onclick="DeletePost('@post.Title', '/Announcement/Delete/@post.PostId')"> Usuń </a>
+                                        </div>
                             }
-                        </div>
-                        <!-- Collapsed last comments-->
-                        @{
+                                </div>
+                                <!-- Collapsed last comments-->
+                                @{
                             const int maxRecentComments = 3; // How many comments will be displayed on index page per post.
                             var postComments = Model.Comments.Where(e => e.PostId == post.PostId).OrderByDescending(e => e.DateCreated).Take(maxRecentComments);
-                            <div class="collapse mt-3" id="Current_@post.PostId">
-                                @foreach (Comment comment in postComments)
+                                            <div class="collapse mt-3" id="Current_@post.PostId">
+                                                @foreach (Comment comment in postComments)
                                 {
                                     User commentAuthor = Model.Users.FirstOrDefault(e => e.Id == comment.AuthorId);
                                     CommentViewModel commentViewModel = new CommentViewModel
@@ -108,24 +108,24 @@
                                         Comment = comment,
                                         CommentAuthor = commentAuthor
                                     };
-                                    <partial name="_Comment" for="@commentViewModel"/>
+                                                    <partial name="_Comment" for="@commentViewModel"/>
                                 }
-                            </div>
-                        }
-                        @if (User.Identity.IsAuthenticated)
+                                            </div>
+                                }
+                                @if (User.Identity.IsAuthenticated)
                         {
-                            <!-- create comment for announcement -->
-                            <div class="d-flex flex-row mt-3 mb-4">
-                                <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="shadow-lg mx-auto d-block mb-1 me-1 mt-1"
-                                     style="padding: 5px; width: 70px; height: 70px" alt="image of user"/>
-                                @Html.AntiForgeryToken()
-                                <textarea style="resize: none;" type="text" class="form-control me-3" placeholder="Dodaj komentarz" id="CommentForm_@post.PostId"></textarea>
-                                <button class="btn btn-primary" type="button" onclick="addComment(@post.PostId)"> Dodaj komentarz </button>
-                            </div>
+                                    <!-- create comment for announcement -->
+                                    <div class="d-flex flex-row mt-3 mb-4">
+                                        <img src="https://media.sketchfab.com/models/c9937e06e98c463c9a645b299b24cd2f/thumbnails/3427570ea6ba4cc8be1333fd9c510381/80e39cbc5c8b475ebd393d64f67800fe.jpeg" class="shadow-lg mx-auto d-block mb-1 me-1 mt-1"
+                                             style="padding: 5px; width: 70px; height: 70px" alt="image of user"/>
+                                        @Html.AntiForgeryToken()
+                                        <textarea style="resize: none;" type="text" class="form-control me-3" placeholder="Dodaj komentarz" id="CommentForm_@post.PostId"></textarea>
+                                        <button class="btn btn-primary" type="button" onclick="addComment(@post.PostId)"> Dodaj komentarz </button>
+                                    </div>
                         }
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
         }
     }
 </div>
@@ -182,13 +182,13 @@
         <div class="card-header float-end m-2 text-primary">
             @{
                 int pageNumbersCounter = 1;
-                <label id="PageLabel">Strony:</label>
+                        <label id="PageLabel">Strony:</label>
                 if (Model.PageId > 2)
                 {
-                    <a asp-action="Index" asp-route-pageId="1" class="btn btn-primary" id="PageButton"> 1 </a>
+                            <a asp-action="Index" asp-route-pageId="1" class="btn btn-primary" id="PageButton"> 1 </a>
                     if (Model.PageId > 3)
                     {
-                        <label> ... </label>
+                                <label> ... </label>
                     }
                 }
                 double lastPage = Math.Ceiling(Model.Announcements.Count() / (double)postsPerPage);
@@ -200,19 +200,19 @@
                     }
                     if (pageNumbersCounter == 4 && i != lastPage)
                     {
-                        <label> ... </label>
-                        <a asp-action="Index" asp-route-pageId="@lastPage" class="btn btn-primary" id="PageButton">
-                            @lastPage
-                        </a>
+                                <label> ... </label>
+                                <a asp-action="Index" asp-route-pageId="@lastPage" class="btn btn-primary" id="PageButton">
+                                    @lastPage
+                                </a>
                         break;
                     }
                     if (i == Model.PageId)
                     {
-                        <a class="btn alert-primary disabled" id="CurrentPageButton"> @i </a>
+                                <a class="btn alert-primary disabled" id="CurrentPageButton"> @i </a>
                     }
                     else
                     {
-                        <a asp-action="Index" asp-route-pageId="@i" class="btn btn-primary" id="PageButton"> @i </a>
+                                <a asp-action="Index" asp-route-pageId="@i" class="btn btn-primary" id="PageButton"> @i </a>
                     }
                     pageNumbersCounter++;
                 }

@@ -1,1 +1,0 @@
-﻿Default profile image was downloaded from https://minecraftfaces.com/creeper-face/
