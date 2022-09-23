@@ -4,6 +4,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MinecraftServerWeb.Models;
 using MinecraftServerWeb.Repository.Interfaces;
+using MinecraftServerWeb.Utility;
 
 namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
 {
@@ -19,16 +21,19 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IWebHostEnvironment webHostEnvironment)
 
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public const double MaxImageSize = 2;
@@ -72,6 +77,9 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
 
             [Display(Name= "Opis profilu (maksymalnie 1000 znaków)")]
             public string ProfileDescription { get; set; }
+
+            public IFormFile AddedPhoto { get; set; }
+
         }
 
         private async Task LoadAsync(User user)
@@ -86,7 +94,7 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                ProfileDescription = description
+                ProfileDescription = description,
             };
         }
 
@@ -130,6 +138,14 @@ namespace MinecraftServerWeb.Areas.Identity.Pages.Account.Manage
             {
                 user.ProfileDescription = Input.ProfileDescription;
             }
+            if ( Input.AddedPhoto != null)
+            {
+                var img = UserImagesManager.ConvertIFormFileToImage(Input.AddedPhoto);
+                var btm = UserImagesManager.ResizeImage(new Size(600, 600), img);
+                string path = UserImagesManager.GetUserImagePath(user);
+                UserImagesManager.SaveBitmapToFile(btm, path);
+            }
+            _unitOfWork.Commit();
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Twój profil został zaaktualizowany";
             return RedirectToPage();

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using MinecraftServerWeb.Utility;
 using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
-using Path = MinecraftServerWeb.Utility.Path;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,9 +22,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = Path.LoginPath;
-    options.LogoutPath = Path.LogoutPath; 
-    options.AccessDeniedPath = Path.AccessDeniedPath;
+    options.LoginPath = Paths.LoginPath;
+    options.LogoutPath = Paths.LogoutPath; 
+    options.AccessDeniedPath = Paths.AccessDeniedPath;
 });
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
