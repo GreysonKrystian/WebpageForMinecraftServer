@@ -17,12 +17,14 @@ namespace MinecraftServerWeb.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<IdentityUser> _userManager;
-
-        public AnnouncementController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+        private readonly IConfiguration _configuration;
+        
+        public AnnouncementController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager, IConfiguration configuration)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
 
@@ -35,22 +37,27 @@ namespace MinecraftServerWeb.Controllers
         // POST: Announcement/Create/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Announcement announcement)
+        public async Task<ActionResult> Create(CreateAnnouncementViewModel announcementViewModel)
         {
-            announcement.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var dcHook = new DiscordHookHandler("/1001169324494569492/3JmGCyaAsTiENcHC5vsvWFYW0TamlOk6MPjWURX3OK8PUWS5znJue7hI-yj219fO4Jvx", _userManager); // TODO make this environmental
-            await dcHook.SendDiscordEmbeddedMessage(announcement);
-
-            _unitOfWork.Announcement.Add(announcement); // TODO exception handling
-            _unitOfWork.Commit();
-
             try
             {
+                announcementViewModel.Announcement.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (announcementViewModel.PostToDiscord)
+                {
+                    var dcHook = new DiscordHookHandler(_userManager, _configuration);
+                    await dcHook.SendDiscordEmbeddedMessage(announcementViewModel.Announcement);
+                }
+                else
+                {
+                    _logger.LogInformation("Announcement was not sent to discord");
+                }
+                _unitOfWork.Announcement.Add(announcementViewModel.Announcement);
+                _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index),"Home");
             }
             catch
             {
-                _logger.LogError("Failed to send announcement to Discord/create announcement");
+                _logger.LogError("Failed to create announcement");
                 return View();
             }
         }

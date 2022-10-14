@@ -13,15 +13,19 @@ namespace MinecraftServerWeb.Utility.DiscordHandlers
     {
         private readonly string _discordIdAndToken;
         private readonly UserManager<IdentityUser> _userManager;
-        public DiscordHookHandler(string discordIdAndToken, UserManager<IdentityUser> userManager)
+        public DiscordHookHandler(UserManager<IdentityUser> userManager, IConfiguration configuration)
         {
-            _discordIdAndToken = discordIdAndToken;
+            _discordIdAndToken = configuration.GetValue<string>("Discord:HookIdAndToken");
             _userManager = userManager;
         }
 
         public async Task SendDiscordMessage(Post post)
         {
-            using var client = new DiscordWebhookClient("https://discord.com/api/webhooks" + _discordIdAndToken);
+            if (string.IsNullOrEmpty(_discordIdAndToken))
+            {
+                throw new Exception("Discord Hook not provided");
+            }
+            using var client = new DiscordWebhookClient(Paths.DiscordWebHookBase + _discordIdAndToken);
             await client.SendMessageAsync(text: post.Content,
                 username: post.Author.ServerNickname,
                 avatarUrl: post.Author.AvatarUrl);
@@ -29,7 +33,11 @@ namespace MinecraftServerWeb.Utility.DiscordHandlers
 
         public async Task SendDiscordEmbeddedMessage(Announcement announcement)
         {
-            using var client = new DiscordWebhookClient("https://discord.com/api/webhooks" + _discordIdAndToken);
+            if (string.IsNullOrEmpty(_discordIdAndToken))
+            {
+                throw new Exception("Discord Hook not provided");
+            }
+            using var client = new DiscordWebhookClient(Paths.DiscordWebHookBase + _discordIdAndToken);
 
             var embed = CreateEmbeddedMessage(announcement);
 
@@ -46,7 +54,7 @@ namespace MinecraftServerWeb.Utility.DiscordHandlers
             return new EmbedBuilder
             {
                 Title = announcement.Title,
-                Description = announcement.Content, // TODO Temporary then remove
+                Description = announcement.Content,
                 Author = new EmbedAuthorBuilder
                 {
                     Name = user.ForumNickname,

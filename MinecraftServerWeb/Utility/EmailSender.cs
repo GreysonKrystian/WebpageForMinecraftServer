@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using System.Web.Http.Results;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using MimeKit;
 
@@ -20,6 +21,10 @@ namespace MinecraftServerWeb.Utility
             #else
             var credentialsEmail = _configuration.GetValue<string>("EmailProvider:Email");
             var credentialsPassword = _configuration.GetValue<string>("EmailProvider:Password");
+            if(string.IsNullOrEmpty(credentialsEmail) || string.IsNullOrEmpty(credentialsPassword))
+            {
+                throw new Exception("Server Error: Email provider credentials were not set.");
+            }
             var message = new MimeMessage();
             message.From.Add(MailboxAddress.Parse(credentialsEmail));
             message.To.Add(MailboxAddress.Parse(email));
