@@ -1,41 +1,34 @@
-﻿@model MinecraftServerWeb.Models.Announcement
+﻿@model MinecraftServerWeb.ViewModels.CreateAnnouncementViewModel
 
 @{
     ViewData["Title"] = "Edycja Ogłoszenia";
-    bool ResendOnDiscord = false;
 }
 <h4>@ViewData["Title"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-10">
-        <form asp-action="Edit">
+        <form asp-action="Edit" asp-controller="Announcement" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsEmbedded" /> Wiadomość wbudowana (discord)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="@ResendOnDiscord" /> Wysłać ponownie na serwer discord?
-                </label>
+                <label class="form-check-label"> Wysłać ponownie na serwer discord?</label>
+                <input type="checkbox" name="PostToDiscord" value="true" checked/>           
+                </div>
+            <div class="form-group">
+                <label asp-for="Announcement.Title" class="control-label"> Tytuł </label>
+                <input asp-for="Announcement.Title" class="form-control" />
+                <span asp-validation-for="Announcement.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"> Tytuł </label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="Announcement.Description" class="control-label"> Opis </label>
+                <textarea asp-for="Announcement.Description" rows="3" class="form-control"> </textarea>
+                <span asp-validation-for="Announcement.Description" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="Announcement.PostId"/>
+            <input type="hidden" asp-for="Announcement.AuthorId" />
             <div class="form-group">
-                <label asp-for="Description" class="control-label"> Opis </label>
-                <textarea asp-for="Description" rows="3" class="form-control"> </textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="PostId"/>
-            <input type="hidden" asp-for="AuthorId" />
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"> Treść Ogłoszenia </label>
-            <textarea asp-for="Content" rows="20" class="form-control" required data-error="Wprowadź tekst"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
+                <label asp-for="Announcement.Content" class="control-label"> Treść Ogłoszenia </label>
+            <textarea asp-for="Announcement.Content" rows="20" class="form-control" required data-error="Wprowadź tekst"></textarea>
+                <span asp-validation-for="Announcement.Content" class="text-danger"></span>
             </div>
             <div class="form-group mt-3">
                 <input type="submit" value="Potwierdź" class="btn btn-outline-primary" />

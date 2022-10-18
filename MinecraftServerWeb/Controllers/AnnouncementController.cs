@@ -76,18 +76,31 @@ namespace MinecraftServerWeb.Controllers
             {
                 return Unauthorized();
             }
-            return View(post);
+
+            CreateAnnouncementViewModel createAnnouncementViewModel = new CreateAnnouncementViewModel
+            {
+                Announcement = post,
+                PostToDiscord = false
+            };
+            return View(createAnnouncementViewModel);
         }
 
         // POST: Announcement/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Announcement announcement)
+        [Route("Announcement/Edit/{PostId}")]
+
+        public async Task<ActionResult> Edit(CreateAnnouncementViewModel createAnnouncementViewModel)
         {
             try
             {
-                announcement.DateCreated = DateTime.Now;
-                _unitOfWork.Announcement.Update(announcement);
+                createAnnouncementViewModel.Announcement.DateCreated = DateTime.Now;
+                _unitOfWork.Announcement.Update(createAnnouncementViewModel.Announcement);
+                if (createAnnouncementViewModel.PostToDiscord)
+                {
+                    var dcHook = new DiscordHookHandler(_userManager, _configuration);
+                    await dcHook.SendDiscordEmbeddedMessage(createAnnouncementViewModel.Announcement);
+                }
                 _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index), controllerName:"Home");
             }

@@ -9,9 +9,9 @@
 <hr />
 <div class="row">
     <div class="col-md-10">
-        <label asp-for="Announcement.Title" class="control-label"> Postuj na kanale Discord </label>
-        <input type="checkbox" asp-for="PostToDiscord"/>
         <form method="post">
+            <label asp-for="Announcement.Title" class="control-label me-3"> Postuj na kanale Discord </label>
+            <input type="checkbox" name="PostToDiscord" value="true" checked/>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Announcement.Title" class="control-label"> Tytuł </label>
