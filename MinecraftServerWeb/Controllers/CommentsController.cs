@@ -22,13 +22,18 @@ namespace MinecraftServerWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddComment(int postId, string content)
         {
-            if (content == null)
+            if (content == "")
             {
-                return BadRequest();
+                return BadRequest("no content do comment");
             }
             if (null == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 return Unauthorized();
+            }
+
+            if (null == _unitOfWork.Post.GetFirstOrDefault(e => e.PostId == postId))
+            {
+                return BadRequest("Wrong post Id");
             }
             Comment comment = new()
             {

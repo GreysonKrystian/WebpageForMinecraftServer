@@ -5,7 +5,7 @@
         type: "POST",
         url: '/Comments/AddComment/',
         data: {
-            announcementId:postId,
+            postId:postId,
             content: content,
             __RequestVerificationToken: token
         },
