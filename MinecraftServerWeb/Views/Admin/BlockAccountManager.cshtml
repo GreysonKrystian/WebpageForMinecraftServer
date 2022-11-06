@@ -43,6 +43,7 @@
                 <div class="input-group timepicker">
                     <input type="text" class="form-control" id="TimePicker" asp-for="BlockEndTime"/>
                 </div>
+                @Html.AntiForgeryToken()
                 <div class="row mt-3">
                     <label for="BanReason" class="form-label mt-2"> Powód blokady: </label>
                 </div>

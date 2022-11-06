@@ -52,9 +52,8 @@
                         @if (User.IsInRole(SD.RoleOwner) || User.IsInRole(SD.RoleAdmin))
                         {
                             <li>
-                            
+                                     <a asp-controller="Admin" asp-action="ManageUsers" class="nav-link"> Panel Administratora</a>
                             </li>
-                            <a asp-controller="Admin" asp-action="ManageUsers" class="nav-link"> Panel Administratora</a>
                         }
                     }
                     <partial name="_LoginNavbarPartial"/>
